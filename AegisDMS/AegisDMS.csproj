@@ -19,6 +19,7 @@
     <IISExpressAnonymousAuthentication />
     <IISExpressWindowsAuthentication />
     <IISExpressUseClassicPipelineMode />
+    <UseGlobalApplicationHostFile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -96,8 +97,6 @@
     <Content Include="DisplayWord.aspx" />
     <Content Include="File.aspx" />
     <Content Include="FileCategory.aspx" />
-    <Content Include="Files\Raw\test2.mp4" />
-    <Content Include="Files\Raw\testVideo.wmv" />
     <Content Include="FileType.aspx" />
     <Content Include="font-awesome\css\font-awesome.css" />
     <Content Include="font-awesome\fontawesome-webfont.svg" />
@@ -376,6 +375,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Folder Include="Files\Raw\" />
     <Folder Include="Files\Temp\" />
   </ItemGroup>
   <PropertyGroup>
