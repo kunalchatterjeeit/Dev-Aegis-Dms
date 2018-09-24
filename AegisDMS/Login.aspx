@@ -12,6 +12,7 @@
     <link rel="stylesheet" href="css/matrix-login.css" />
     <link href="font-awesome/css/font-awesome.css" rel="stylesheet" />
     <link href='http://fonts.googleapis.com/css?family=Open+Sans:400,700,800' rel='stylesheet' type='text/css'>
+    
 </head>
 <body>
     <form id="form1" runat="server">
@@ -19,7 +20,7 @@
             <form id="loginform" class="form-vertical">
                 <div class="control-group normal_text">
                     <h3>
-                        <%--<img src="img/custom/Aegis_Docu_Search.png" alt="Logo" />--%>
+                        <img src="img/custom/dms_logo.jpg" alt="Logo" class="dms_logo"  />
                         Aegis Docu-Search
                     </h3>
                 </div>
