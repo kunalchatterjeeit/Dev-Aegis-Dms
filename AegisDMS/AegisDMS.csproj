@@ -85,7 +85,6 @@
     <Content Include="css\colorpicker.css" />
     <Content Include="css\custom.css" />
     <Content Include="css\datepicker.css" />
-    <Content Include="css\dms_logo.css" />
     <Content Include="css\font-awesome.css" />
     <Content Include="css\fullcalendar.css" />
     <Content Include="css\jquery.easy-pie-chart.css" />
