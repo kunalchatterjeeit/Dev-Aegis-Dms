@@ -17,10 +17,11 @@
 <body>
     <form id="form1" runat="server">
         <div id="loginbox">
+             <img src="img/custom/dms_logo.jpg" Id="dms_logo" alt="Logo" style="margin-left:150px" />
             <form id="loginform" class="form-vertical">
                 <div class="control-group normal_text">
                     <h3>
-                        <img src="img/custom/dms_logo.jpg" Id="dms_logo" alt="Logo"  />
+                       
                         Aegis Docu-Search
                     </h3>
                 </div>
