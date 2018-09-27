@@ -116,11 +116,12 @@ namespace DataLayer
             }
         }
 
-        public static DataTable File_SearchByPhrase(string phrase)
+        public static DataTable File_SearchByPhrase(string phrase, int userId)
         {
             using (DataManager oDm = new DataManager())
             {
                 oDm.Add("p_phrase", MySqlDbType.VarChar, phrase);
+                oDm.Add("p_UserId", MySqlDbType.Int32, userId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
                 return oDm.ExecuteDataTable("usp_File_SearchByPhrase");

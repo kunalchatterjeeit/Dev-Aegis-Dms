@@ -220,7 +220,7 @@ namespace AegisDMS
         protected void btnQuickSearch_Click(object sender, EventArgs e)
         {
             _searchMode = "QuickSearch";
-            gvFile.DataSource = BusinessLayer.File.FileSearchByPhrase(txtQuickSearch.Text.Trim());
+            gvFile.DataSource = BusinessLayer.File.FileSearchByPhrase(txtQuickSearch.Text.Trim(), Convert.ToInt32(HttpContext.Current.User.Identity.Name));
             gvFile.DataBind();
         }
 
