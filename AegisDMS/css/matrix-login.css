@@ -57,6 +57,7 @@ body { background-color:#2E363F;    padding: 0;    margin-top:10%;}
 #loginbox .control-group{ padding:20px 0; margin-bottom:0px;}
 .form-vertical, .form-actions {  margin-bottom: 0; background:none; border-top:1px solid #3f4954; }
 #loginbox .normal_text{ padding:15px 10px; text-align:center; font-size:14px; line-height:20px; background:#2E363F; color:#fff; }
+
 @media (max-width:800px){
 #logo { width: 60%; }
 #loginbox{ width:80%}
