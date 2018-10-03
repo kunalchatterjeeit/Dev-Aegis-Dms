@@ -17,8 +17,9 @@
 <body>
     <form id="form1" runat="server">
         <div id="loginbox">
-             <img src="img/custom/dms_logo.jpg" ID="dms_logo" alt="Logo" style="margin-left:60px"  />
+              <img src="img/custom/dms_logo.jpg" ID="dms_logo" alt="Logo" style="margin-left:60px"  />
             <img src="img/custom/Aegis_Docu_Search.png" ID="Aegis_Docu_Search" alt="Logo" style="margin-left:230px;margin-top:-120px;height:100px;width:150px;"  />
+           
             
             <form id="loginform" class="form-vertical">
                 <div class="control-group normal_text">
