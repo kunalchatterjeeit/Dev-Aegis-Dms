@@ -105,11 +105,12 @@ namespace DataLayer
             }
         }
 
-        public static DataTable File_SearchByMetadata(string condition)
+        public static DataTable File_SearchByMetadata(string condition, int userId)
         {
             using (DataManager oDm = new DataManager())
             {
                 oDm.Add("p_Condition", MySqlDbType.VarChar, condition);
+                oDm.Add("p_UserId", MySqlDbType.Int32, userId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
                 return oDm.ExecuteDataTable("usp_File_SearchByMetadata");

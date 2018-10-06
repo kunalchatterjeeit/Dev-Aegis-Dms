@@ -36,9 +36,9 @@ namespace BusinessLayer
             return DataLayer.File.File_Content_Save(fileGuid, content);
         }
 
-        public static DataTable FileSearchByMetadata(string condition)
+        public static DataTable FileSearchByMetadata(string condition, int userId)
         {
-            return DataLayer.File.File_SearchByMetadata(condition);
+            return DataLayer.File.File_SearchByMetadata(condition, userId);
         }
 
         public static DataTable FileSearchByPhrase(string phrase, int userId)

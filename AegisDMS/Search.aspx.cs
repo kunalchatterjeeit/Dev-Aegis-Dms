@@ -206,7 +206,7 @@ namespace AegisDMS
                     query += " GROUP BY MetaDataId,MetaDataContent HAVING COUNT(DISTINCT FileGuid) = " + commonOccurance;
                 }
 
-                gvFile.DataSource = BusinessLayer.File.FileSearchByMetadata(query);
+                gvFile.DataSource = BusinessLayer.File.FileSearchByMetadata(query, Convert.ToInt32(HttpContext.Current.User.Identity.Name));
                 gvFile.DataBind();
             }
             else
