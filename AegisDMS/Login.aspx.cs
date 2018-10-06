@@ -14,11 +14,6 @@ namespace AegisDMS
 {
     public partial class Login : System.Web.UI.Page
     {
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
             if (!IsPostBack)
@@ -40,7 +35,7 @@ namespace AegisDMS
             {
                 if (ip.AddressFamily == AddressFamily.InterNetwork)
                 {
-                    retValue= ip.ToString();
+                    retValue = ip.ToString();
                 }
             }
 
@@ -54,37 +49,51 @@ namespace AegisDMS
 
         protected void btnLogin_Click(object sender, EventArgs e)
         {
-            Entity.Auth auth = new Entity.Auth();
-            DataTable userDetails = BusinessLayer.GeneralSecurity.LogOn(txtUserName.Text.Trim());
-            if (userDetails != null && userDetails.Rows.Count > 0)
+            try
             {
-                string passowrd = (userDetails).Rows[0][1].ToString();
-                if (passowrd.Equals(txtPassword.Text.Trim().ToEncrypt(true)))
+                Entity.Auth auth = new Entity.Auth();
+                DataTable userDetails = BusinessLayer.GeneralSecurity.LogOn(txtUserName.Text.Trim());
+                if (userDetails != null && userDetails.Rows.Count > 0)
                 {
-                    FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(
-                                                                   1,
-                                                                   (userDetails).Rows[0][0].ToString(), //UserId
-                                                                   DateTime.Now,
-                                                                   DateTime.Now.AddHours(2),
-                                                                   false,
-                                                                   "", //define roles here
-                                                                   "/");
-                    HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(authTicket));
-                    Response.Cookies.Add(cookie);
+                    string passowrd = (userDetails).Rows[0][1].ToString();
+                    if (passowrd.Equals(txtPassword.Text.Trim().ToEncrypt(true)))
+                    {
+                        string roles = BusinessLayer.GeneralSecurity.Permission_ByRoleId(Convert.ToInt32(userDetails.Rows[0]["UserId"].ToString()));
+                        FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(
+                                                                       1,
+                                                                       (userDetails).Rows[0][0].ToString(), //UserId
+                                                                       DateTime.Now,
+                                                                       DateTime.Now.AddHours(2),
+                                                                       false,
+                                                                       roles, //define roles here
+                                                                       "/");
+                        HttpCookie cookie = new HttpCookie(FormsAuthentication.FormsCookieName, FormsAuthentication.Encrypt(authTicket));
+                        Response.Cookies.Add(cookie);
 
-                    auth.UserId = Convert.ToInt32((userDetails).Rows[0][0].ToString());
-                    auth.IP = GetIP();
-                    auth.Status = Entity.LoginStatus.Success;
-                    auth.Client = GetClient();
-                    BusinessLayer.GeneralSecurity.Login_Save(auth);
+                        auth.UserId = Convert.ToInt32((userDetails).Rows[0][0].ToString());
+                        auth.IP = GetIP();
+                        auth.Status = Entity.LoginStatus.Success;
+                        auth.Client = GetClient();
+                        BusinessLayer.GeneralSecurity.Login_Save(auth);
+                        Response.Redirect(@"Dashboard.aspx");
+                    }
+                    else
+                    {
+                        auth.UserId = Convert.ToInt32((userDetails).Rows[0][0].ToString());
+                        auth.IP = GetIP();
+                        auth.Status = Entity.LoginStatus.WrongPassword;
+                        auth.Client = GetClient();
+                        auth.FailedUserName = txtUserName.Text;
+                        auth.FailedPassword = txtPassword.Text;
+                        BusinessLayer.GeneralSecurity.Login_Save(auth);
 
-                    Response.Redirect(@"Dashboard.aspx");
+                        lblMessage.Visible = true;
+                    }
                 }
                 else
                 {
-                    auth.UserId = Convert.ToInt32((userDetails).Rows[0][0].ToString());
                     auth.IP = GetIP();
-                    auth.Status = Entity.LoginStatus.WrongPassword;
+                    auth.Status = Entity.LoginStatus.Failed;
                     auth.Client = GetClient();
                     auth.FailedUserName = txtUserName.Text;
                     auth.FailedPassword = txtPassword.Text;
@@ -93,15 +102,9 @@ namespace AegisDMS
                     lblMessage.Visible = true;
                 }
             }
-            else
+            catch (CustomException ex)
             {
-                auth.IP = GetIP();
-                auth.Status = Entity.LoginStatus.Failed;
-                auth.Client = GetClient();
-                auth.FailedUserName = txtUserName.Text;
-                auth.FailedPassword = txtPassword.Text;
-                BusinessLayer.GeneralSecurity.Login_Save(auth);
-
+                ex.Log(Request.Url.AbsoluteUri, 0);
                 lblMessage.Visible = true;
             }
         }

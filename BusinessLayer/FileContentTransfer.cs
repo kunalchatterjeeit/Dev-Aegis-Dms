@@ -43,9 +43,9 @@ namespace BusinessLayer
 
                 BusinessLayer.File.File_Content_Save(fileGuid, innertext); //Saving
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                string err = ex.Message;
+                string err = ex.Log("FileContentTransfer", 0).ToString();
             }
         }
 
@@ -139,9 +139,9 @@ namespace BusinessLayer
                     }
                 }
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-                //Add code for handling errors here.
+                ex.Log("FileContentTransfer", 0);
             }
             finally
             {
@@ -194,7 +194,11 @@ namespace BusinessLayer
                     content.IndexOf(">") - content.IndexOf("<", StringComparison.InvariantCultureIgnoreCase) + 1
                     );
                 }
-                catch { break; }
+                catch (CustomException ex)
+                {
+                    ex.Log("FileContentTransfer", 0);
+                    break;
+                }
             }
 
             //Removing special characters

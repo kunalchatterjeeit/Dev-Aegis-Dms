@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessLayer;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
@@ -148,9 +149,9 @@ namespace AegisDMS
                         UserMessage.Css = BusinessLayer.MessageCssClass.Error;
                     }
                 }
-                catch (Exception ex)
+                catch (CustomException ex)
                 {
-                    UserMessage.Text = "Cannot delete. " + ex.Message;
+                    UserMessage.Text = "Cannot delete. " + ex.Log(Request.Url.AbsoluteUri, Convert.ToInt32(HttpContext.Current.User.Identity.Name));
                     UserMessage.Css = BusinessLayer.MessageCssClass.Error;
                 }
             }

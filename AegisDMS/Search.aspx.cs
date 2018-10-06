@@ -73,6 +73,9 @@ namespace AegisDMS
 
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (!HttpContext.Current.User.Identity.IsAuthenticated)
+                Response.Redirect("Login.aspx");
+
             if (!IsPostBack)
             {
                 FileCategory_GetAll();
@@ -172,7 +175,7 @@ namespace AegisDMS
 
             string query = string.Empty;
             string queryType = string.Empty;
-            int commonOccurance = 0;
+            int commonOccurance = 1;
 
             if (dtQuery != null && dtQuery.Rows.Count > 0)
             {
@@ -203,7 +206,7 @@ namespace AegisDMS
 
                 if (queryType == "AND" && commonOccurance > 0)
                 {
-                    query += " GROUP BY MetaDataId,MetaDataContent HAVING COUNT(DISTINCT FileGuid) = " + commonOccurance;
+                    query += " GROUP BY FileGuid HAVING COUNT(FileGuid) >= " + commonOccurance;
                 }
 
                 gvFile.DataSource = BusinessLayer.File.FileSearchByMetadata(query, Convert.ToInt32(HttpContext.Current.User.Identity.Name));
@@ -234,8 +237,9 @@ namespace AegisDMS
                     anchrPopUp.Attributes.Add("onclick", "javascript:openpopup('Viewer.aspx?id=" + gvFile.DataKeys[e.Row.RowIndex].Values[0].ToString().ToEncrypt(true) + "')");
                 }
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
+                ex.Log(Request.Url.AbsoluteUri, Convert.ToInt32(HttpContext.Current.User.Identity.Name));
             }
         }
 

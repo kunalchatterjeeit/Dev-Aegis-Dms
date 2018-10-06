@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataManager.cs" />
+    <Compile Include="ExceptionLog.cs" />
     <Compile Include="File.cs" />
     <Compile Include="FileCategory.cs" />
     <Compile Include="FileContent.cs" />
@@ -60,7 +61,9 @@
     <Compile Include="Metadata.cs" />
     <Compile Include="MetadataFileMapping.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Role.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="UserGroup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Entity\Entity.csproj">

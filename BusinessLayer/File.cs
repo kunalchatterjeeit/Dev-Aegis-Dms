@@ -61,6 +61,16 @@ namespace BusinessLayer
             return DataLayer.File.File_Delete(fileGuid);
         }
 
+        public static DataTable MetadataFileMappingGetByFileGuid(string fileGuid)
+        {
+            return DataLayer.File.MetadataFileMapping_GetByFileGuid(fileGuid);
+        }
+
+        public static DataTable PdfSeperatorGetAll()
+        {
+            return DataLayer.File.PdfSeperator_GetAll();
+        }
+
         // Destructor
         ~File()
         {

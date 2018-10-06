@@ -16,5 +16,12 @@ namespace Entity
         public string Username { get; set; }
         public string Password { get; set; }
         public int CreatedBy { get; set; }
+        public int Status { get; set; }
+    }
+
+    public enum UserStatus
+    {
+        InActive = 0,
+        Active = 1
     }
 }

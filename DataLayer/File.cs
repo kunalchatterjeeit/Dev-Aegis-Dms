@@ -162,5 +162,25 @@ namespace DataLayer
                 return oDm.ExecuteNonQuery("usp_File_Delete");
             }
         }
+
+        public static DataTable MetadataFileMapping_GetByFileGuid(string fileGuid)
+        {
+            using (DataManager oDm = new DataManager())
+            {
+                oDm.Add("p_FileGuid", MySqlDbType.VarChar, fileGuid);
+
+                oDm.CommandType = CommandType.StoredProcedure;
+                return oDm.ExecuteDataTable("usp_MetadataFileMapping_GetByFileGuid");
+            }
+        }
+
+        public static DataTable PdfSeperator_GetAll()
+        {
+            using (DataManager oDm = new DataManager())
+            {
+                oDm.CommandType = CommandType.StoredProcedure;
+                return oDm.ExecuteDataTable("usp_PdfSeperator_GetAll");
+            }
+        }
     }
 }

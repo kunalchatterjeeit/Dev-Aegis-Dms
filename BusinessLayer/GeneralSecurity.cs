@@ -22,6 +22,11 @@ namespace BusinessLayer
             return DataLayer.Auth.Login_Save(auth);
         }
 
+        public static string Permission_ByRoleId(int userId)
+        {
+            return DataLayer.Auth.Permission_ByRoleId(userId);
+        }
+
         public static string ToEncrypt(this string toEncrypt, bool useHashing)
         {
             byte[] keyArray;
@@ -172,9 +177,9 @@ namespace BusinessLayer
                     }
                 }
             }
-            catch (Exception ex)
+            catch (CustomException ex)
             {
-
+                ex.Log("GeneralSecurity", 0);
             }
         }
     }

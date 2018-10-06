@@ -12,14 +12,6 @@ namespace AegisDMS
     public partial class Viewer : System.Web.UI.Page
     {
         private Guid _fileGuid { get; set; }
-        protected void Page_Load(object sender, EventArgs e)
-        {
-            string rawId = Request.QueryString["id"].ToString().ToDecrypt(true);
-            _fileGuid = (rawId != null && !string.IsNullOrEmpty(rawId)) ? Guid.Parse(rawId) : new Guid();
-
-            PrepareFileLoader();
-        }
-
         private void PrepareFileLoader()
         {
             DataTable dtFile = BusinessLayer.File.FileGetByFileGuid(_fileGuid.ToString());
@@ -41,6 +33,36 @@ namespace AegisDMS
             {
                 iframe.Attributes.Add("src", "NoPreview.aspx");
             }
+
+            if (dtFile != null && dtFile.Rows.Count > 0)
+            {
+                lblFileName.Text = dtFile.Rows[0]["FileOriginalName"].ToString() + dtFile.Rows[0]["FileExtension"].ToString();
+                lblEntryDate.Text = dtFile.Rows[0]["EntryDate"].ToString();
+                lblFileAttachment.Text = (dtFile.Rows[0]["IsAttachment"].ToString().Equals("0")) ? "No" : "Yes";
+                lblFullTextCopy.Text = (dtFile.Rows[0]["IsFullTextCopied"].ToString().Equals("1")) ? "Done" : "Not done";
+                lblUploadDate.Text = dtFile.Rows[0]["CreatedDate"].ToString();
+                lblUploadedBy.Text = dtFile.Rows[0]["CreatedBy"].ToString();
+                lblModifiedDate.Text = (string.IsNullOrEmpty(dtFile.Rows[0]["LastModifiedDate"].ToString())) ? "Not modified yet" : dtFile.Rows[0]["LastModifiedDate"].ToString();
+                lblModifiedBy.Text = (string.IsNullOrEmpty(dtFile.Rows[0]["LastModifiedBy"].ToString())) ? "Not modified yet" : dtFile.Rows[0]["LastModifiedBy"].ToString();
+            }
         }
+        private void MetadataFileMappingGetByFileGuid()
+        {
+            DataTable dtMetadataFileMapping = BusinessLayer.File.MetadataFileMappingGetByFileGuid(_fileGuid.ToString());
+            if (dtMetadataFileMapping != null && dtMetadataFileMapping.Rows.Count > 0)
+            {
+                gvMetaDataContent.DataSource = dtMetadataFileMapping;
+                gvMetaDataContent.DataBind();
+            }
+        }
+        protected void Page_Load(object sender, EventArgs e)
+        {
+            string rawId = Request.QueryString["id"].ToString().ToDecrypt(true);
+            _fileGuid = (rawId != null && !string.IsNullOrEmpty(rawId)) ? Guid.Parse(rawId) : new Guid();
+
+            MetadataFileMappingGetByFileGuid();
+            PrepareFileLoader();
+        }
+
     }
 }

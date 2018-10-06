@@ -14,7 +14,6 @@
             <div id="breadcrumb"><a href="Dashboard.aspx" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a></div>
             <h4>
                 <uc1:UserMessage runat="server" ID="UserMessage" />
-            </h4>
         </div>
         <!--End-breadcrumbs-->
 
@@ -74,6 +73,61 @@
                     <div class="widget-box">
                         <div class="widget-title">
                             <span class="icon"><i class="icon-align-justify"></i></span>
+                            <h5>List</h5>
+                        </div>
+                        <div class="widget-content">
+                            <div class="form-horizontal">
+                                <asp:GridView ID="gvUserGroup" runat="server" class="table table-bordered table-striped"
+                                    AutoGenerateColumns="false" DataKeyNames="UserGroupId">
+                                    <Columns>
+                                        <asp:TemplateField HeaderStyle-Width="5">
+                                            <HeaderTemplate>
+                                                <asp:CheckBox ID="chkGroupHeader" runat="server" AutoPostBack="true" OnCheckedChanged="chkGroupHeader_CheckedChanged" />
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <asp:CheckBox ID="chkGroup" runat="server" AutoPostBack="true" OnCheckedChanged="chkGroup_CheckedChanged"/>
+                                            </ItemTemplate>
+
+                                            <HeaderStyle Width="5px"></HeaderStyle>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderStyle-Width="10">
+                                            <HeaderTemplate>
+                                                SN.
+                                            </HeaderTemplate>
+                                            <ItemTemplate>
+                                                <%# Container.DataItemIndex+1 %>
+                                            </ItemTemplate>
+
+                                            <HeaderStyle Width="10px"></HeaderStyle>
+                                        </asp:TemplateField>
+                                        <asp:TemplateField HeaderText="User Group" ItemStyle-HorizontalAlign="Right">
+                                            <ItemTemplate>
+                                                <%# Eval("Name") %>
+                                            </ItemTemplate>
+
+                                            <ItemStyle HorizontalAlign="Right"></ItemStyle>
+                                        </asp:TemplateField>
+                                    </Columns>
+                                    <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
+                                    <HeaderStyle BackColor="#0349AA" Font-Bold="True" ForeColor="White" />
+                                    <RowStyle CssClass="RowStyle" BackColor="#F7F6F3" ForeColor="#333333" />
+                                    <EditRowStyle BackColor="#999999" />
+                                    <EmptyDataRowStyle CssClass="EditRowStyle" />
+                                    <AlternatingRowStyle CssClass="AltRowStyle" BackColor="White" ForeColor="#284775" />
+                                    <EmptyDataTemplate>
+                                        No Record Found...
+                                    </EmptyDataTemplate>
+                                </asp:GridView>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row-fluid">
+                <div class="span12">
+                    <div class="widget-box">
+                        <div class="widget-title">
+                            <span class="icon"><i class="icon-align-justify"></i></span>
                             <h5>Select File(s)</h5>
                         </div>
                         <div class="widget-content">
@@ -86,7 +140,6 @@
                                 <div class="control-group">
                                     <asp:Button ID="btnSave" runat="server" Text="Save" class="btn btn-success" OnClick="btnSave_Click" />
                                     <asp:Button ID="btnCancel" runat="server" Text="Cancel" class="btn btn-danger" OnClick="btnCancel_Click" />
-                                    <asp:Label ID="lblMessage" runat="server" Visible="false"></asp:Label>
                                 </div>
                             </div>
                         </div>

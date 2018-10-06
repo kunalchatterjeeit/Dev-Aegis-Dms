@@ -22,7 +22,7 @@
     <form id="form1" runat="server">
         <!--Header-part-->
         <div id="header">
-            <h1><a href="Dashboard.aspx">Aegis Docuflow</a></h1>
+            <h1><a href="Dashboard.aspx">&nbsp;</a></h1>
         </div>
         <!--close-Header-part-->
 
@@ -51,15 +51,19 @@
         <!--close-top-serch-->
         <!--sidebar-menu-->
         <div id="sidebar">
-            <a href="#" class="visible-phone"><i class="icon icon-home"></i>Dashboard</a>
+            <a href="#" class="visible-phone"><i class="icon icon-list"></i>Menu</a>
             <ul>
                 <li><a href="Dashboard.aspx"><i class="icon icon-home"></i><span>Dashboard</span></a> </li>
-                <li><a href="User.aspx"><i class="icon icon-user"></i><span>User</span></a> </li>
-                <li><a href="FileCategory.aspx"><i class="icon icon-folder-open"></i><span>File Category</span></a> </li>
-                <li><a href="FileType.aspx"><i class="icon icon-folder-open"></i><span>File Type</span></a> </li>
-                <li><a href="Metadata.aspx"><i class="icon icon-tags"></i><span>Metadata</span></a></li>
-                <li><a href="File.aspx"><i class="icon icon-file"></i><span>File</span></a></li>
-                <li><a href="Search.aspx"><i class="icon icon-search"></i><span>Search</span></a></li>
+                <li id="liUser" runat="server"><a href="User.aspx"><i class="icon icon-user"></i><span>User</span></a> </li>
+                <li id="liUserRole" runat="server"><a href="Role.aspx"><i class="icon icon-user-md"></i><span>User Role</span></a> </li>
+                <li id="liRolePermission" runat="server"><a href="RolePermission.aspx"><i class="icon icon-key"></i><span>Role Permission</span></a> </li>
+                <li id="liUserGroup" runat="server"><a href="UserGroup.aspx"><i class="icon icon-group"></i><span>User Group</span></a> </li>
+                <li id="liFileCategory" runat="server"><a href="FileCategory.aspx"><i class="icon icon-folder-close"></i><span>File Category</span></a> </li>
+                <li id="liFileType" runat="server"><a href="FileType.aspx"><i class="icon icon-folder-open"></i><span>File Type</span></a> </li>
+                <li id="liMetadata" runat="server"><a href="Metadata.aspx"><i class="icon icon-tags"></i><span>Metadata</span></a></li>
+                <li id="liFile" runat="server"><a href="File.aspx"><i class="icon icon-file"></i><span>File</span></a></li>
+                <li id="liFileNew" runat="server" style="display:none"><a href="FileAutoFormat.aspx"><i class="icon icon-file"></i><span>Auto File (New)</span></a></li>
+                <li id="liSearch" runat="server"><a href="Search.aspx"><i class="icon icon-search"></i><span>Search</span></a></li>
                 <%--<li class="submenu"><a href="#"><i class="icon icon-th-list"></i><span>Forms</span> <span class="label label-important">3</span></a>
                     <ul>
                         <li><a href="form-common.html">Basic Form</a></li>

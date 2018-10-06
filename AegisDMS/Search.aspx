@@ -246,7 +246,7 @@
                             <%# Eval("FileType") %>
                         </ItemTemplate>
                     </asp:TemplateField>
-                    <asp:TemplateField HeaderText="Upload Date">
+                    <asp:TemplateField HeaderText="Entry Date">
                         <ItemTemplate>
                             <%# Eval("EntryDate") %>
                         </ItemTemplate>

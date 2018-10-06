@@ -38,20 +38,16 @@
     <Reference Include="itextsharp">
       <HintPath>..\packages\iTextSharp.5.5.11\lib\itextsharp.dll</HintPath>
     </Reference>
-    <Reference Include="Microsoft.Office.Interop.Excel">
-      <HintPath>..\AJAX DLL\Microsoft.Office.Interop.Excel.dll</HintPath>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.Office.Interop.OneNote">
-      <HintPath>..\AJAX DLL\Microsoft.Office.Interop.OneNote.dll</HintPath>
+    <Reference Include="Microsoft.Office.Interop.OneNote, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.Office.Interop.PowerPoint">
-      <HintPath>..\AJAX DLL\Microsoft.Office.Interop.PowerPoint.dll</HintPath>
+    <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.Office.Interop.Word">
-      <HintPath>..\AJAX DLL\Microsoft.Office.Interop.Word.dll</HintPath>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
     <Reference Include="System" />
@@ -65,6 +61,8 @@
   <ItemGroup>
     <Compile Include="Context.cs" />
     <Compile Include="Disposable.cs" />
+    <Compile Include="CustomException.cs" />
+    <Compile Include="ExceptionHelper.cs" />
     <Compile Include="File.cs" />
     <Compile Include="FileCategory.cs" />
     <Compile Include="FileContent.cs" />
@@ -77,7 +75,9 @@
     <Compile Include="PdfReader.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="GeneralSecurity.cs" />
+    <Compile Include="Role.cs" />
     <Compile Include="User.cs" />
+    <Compile Include="UserGroup.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\DataLayer\DataLayer.csproj">

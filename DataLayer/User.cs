@@ -14,6 +14,7 @@ namespace DataLayer
 
         public static int User_Save(Entity.User user)
         {
+            int retValue = 0;
             using (DataManager oDm = new DataManager())
             {
                 oDm.Add("p_UserId", MySqlDbType.Int32, user.UserId);
@@ -21,9 +22,11 @@ namespace DataLayer
                 oDm.Add("p_Username", MySqlDbType.VarChar, user.Username);
                 oDm.Add("p_Password", MySqlDbType.VarChar, user.Password);
                 oDm.Add("p_CreatedBy", MySqlDbType.Int32, user.CreatedBy);
+                oDm.Add("p_Status", MySqlDbType.Int32, user.Status);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_User_Save");
+                retValue = oDm.ExecuteNonQuery("usp_User_Save");
+                return retValue;
             }
         }
 
@@ -61,6 +64,21 @@ namespace DataLayer
 
                 oDm.CommandType = CommandType.StoredProcedure;
                 return oDm.ExecuteNonQuery("usp_User_StatusChange");
+            }
+        }
+
+        public static int UserRole_Save(int userId, int roleId, bool isEnabled)
+        {
+            int retValue = 0;
+            using (DataManager oDm = new DataManager())
+            {
+                oDm.Add("p_UserId", MySqlDbType.Int32, userId);
+                oDm.Add("p_RoleId", MySqlDbType.VarChar, roleId);
+                oDm.Add("p_IsEnable", MySqlDbType.Bit, isEnabled);
+
+                oDm.CommandType = CommandType.StoredProcedure;
+                retValue = oDm.ExecuteNonQuery("usp_UserRole_Save");
+                return retValue;
             }
         }
     }

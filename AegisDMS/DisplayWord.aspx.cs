@@ -64,21 +64,28 @@ namespace AegisDMS
 
             io.File.Delete(htmlFilePath.ToString());
             io.File.Delete(_strFilePath.ToString());
-            Response.End();        
+            Response.End();
         }
 
         protected void Page_Load(object sender, EventArgs e)
         {
-            string rawId = Request.QueryString["id"].ToString().ToDecrypt(true);
-            _fileGuid = (rawId != null && !string.IsNullOrEmpty(rawId)) ? rawId : string.Empty;
+            try
+            {
+                string rawId = Request.QueryString["id"].ToString().ToDecrypt(true);
+                _fileGuid = (rawId != null && !string.IsNullOrEmpty(rawId)) ? rawId : string.Empty;
 
-            DataTable dtFile = BusinessLayer.File.FileGetByFileGuid(_fileGuid);
-            string encryptedPhysicalFileNameWithPath = (dtFile != null && dtFile.Rows.Count > 0) ? Server.MapPath("~/Files/") + dtFile.Rows[0]["PhysicalFileName"].ToString() + dtFile.Rows[0]["FileExtension"].ToString() : string.Empty;
-            string decryptOriginalFileNameWithPath = (dtFile != null && dtFile.Rows.Count > 0) ? Server.MapPath("~/Files/Raw/") + dtFile.Rows[0]["FileOriginalName"].ToString() + dtFile.Rows[0]["FileExtension"].ToString() : string.Empty;
-            _decryptFile = decryptOriginalFileNameWithPath;
+                DataTable dtFile = BusinessLayer.File.FileGetByFileGuid(_fileGuid);
+                string encryptedPhysicalFileNameWithPath = (dtFile != null && dtFile.Rows.Count > 0) ? Server.MapPath("~/Files/") + dtFile.Rows[0]["PhysicalFileName"].ToString() + dtFile.Rows[0]["FileExtension"].ToString() : string.Empty;
+                string decryptOriginalFileNameWithPath = (dtFile != null && dtFile.Rows.Count > 0) ? Server.MapPath("~/Files/Raw/") + dtFile.Rows[0]["FileOriginalName"].ToString() + dtFile.Rows[0]["FileExtension"].ToString() : string.Empty;
+                _decryptFile = decryptOriginalFileNameWithPath;
 
-            BusinessLayer.GeneralSecurity.DecryptFile(encryptedPhysicalFileNameWithPath, decryptOriginalFileNameWithPath);
-            LoadFile();
+                BusinessLayer.GeneralSecurity.DecryptFile(encryptedPhysicalFileNameWithPath, decryptOriginalFileNameWithPath);
+                LoadFile();
+            }
+            catch (CustomException ex)
+            {
+                ex.Log(Request.Url.AbsoluteUri, Convert.ToInt32(HttpContext.Current.User.Identity.Name));
+            }
         }
     }
 }

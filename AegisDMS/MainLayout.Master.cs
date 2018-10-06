@@ -13,6 +13,20 @@ namespace AegisDMS
         {
             if (!HttpContext.Current.User.Identity.IsAuthenticated)
                 Response.Redirect("Login.aspx");
+
+            if (!IsPostBack)
+            {
+                //SETTING
+                liFileNew.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.FILE);
+                liFile.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.FILE);
+                liFileCategory.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.FILECATEGORY);
+                liFileType.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.FILETYPE);
+                liMetadata.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.METADATA);
+                liRolePermission.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.ROLEPERMISSION);
+                liSearch.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.SEARCH);
+                liUser.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.USER);
+                liUserRole.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.USERROLE);
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using System;
+﻿using BusinessLayer;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -11,7 +12,13 @@ namespace AegisDMS
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            try
+            {
+            }
+            catch (CustomException ex)
+            {
+                ex.Log(Request.Url.AbsoluteUri, Convert.ToInt32(HttpContext.Current.User.Identity.Name));
+            }
         }
     }
 }

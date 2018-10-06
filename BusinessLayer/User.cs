@@ -25,6 +25,11 @@ namespace BusinessLayer
             return DataLayer.User.User_StatusChange(userId, status, modifiedBy);
         }
 
+        public static int UserRole_Save(int userId, int roleId, bool isEnable)
+        {
+            return DataLayer.User.UserRole_Save(userId, roleId, isEnable);
+        }
+
         ~User()
         {
             Dispose(false);

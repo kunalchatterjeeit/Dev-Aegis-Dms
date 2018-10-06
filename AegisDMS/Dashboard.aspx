@@ -15,23 +15,22 @@
         <div class="container-fluid">
             <div class="quick-actions_homepage">
                 <ul class="quick-actions">
-                    <li class="bg_lb"><a href="Dashboard.aspx"><i class="icon-dashboard"></i><span class="label label-important">20</span> My Dashboard </a></li>
-                   <%-- <li class="bg_lg span3"><a href="charts.html"><i class="icon-signal"></i>Charts</a> </li>
-                    <li class="bg_ly"><a href="widgets.html"><i class="icon-inbox"></i><span class="label label-success">101</span> Widgets </a></li>
-                    <li class="bg_lo"><a href="tables.html"><i class="icon-th"></i>Tables</a> </li>
-                    <li class="bg_ls"><a href="grid.html"><i class="icon-fullscreen"></i>Full width</a> </li>
-                    <li class="bg_lo span3"><a href="form-common.html"><i class="icon-th-list"></i>Forms</a> </li>
-                    <li class="bg_ls"><a href="buttons.html"><i class="icon-tint"></i>Buttons</a> </li>
-                    <li class="bg_lb"><a href="interface.html"><i class="icon-pencil"></i>Elements</a> </li>
-                    <li class="bg_lg"><a href="calendar.html"><i class="icon-calendar"></i>Calendar</a> </li>
-                    <li class="bg_lr"><a href="error404.html"><i class="icon-info-sign"></i>Error</a> </li>--%>
-
+                    <%--<li class="bg_lb"><a href="Dashboard.aspx"><i class="icon-dashboard"></i><span class="label label-important">20</span> My Dashboard </a></li>--%>
+                    <li runat="server" id="liDashboard" class="bg_lb span3"><a href="Dashboard.aspx"><i class="icon-dashboard"></i> My Dashboard </a></li>
+                    <li runat="server" id="liRole" class="bg_lg span3"><a href="Role.aspx"><i class="icon-user-md"></i>User Role</a> </li>
+                    <li runat="server" id="liRolePermission" class="bg_ly span3"><a href="RolePermission.aspx"><i class="icon-key"></i> Role Permission </a></li>
+                    <li runat="server" id="liUserGroup" class="bg_lr span3"><a href="UserGroup.aspx"><i class="icon-group"></i>User Group</a> </li>                    
+                    <li runat="server" id="liUser" class="bg_dy span3"><a href="User.aspx"><i class="icon-user"></i>User</a> </li>
+                    <li runat="server" id="liFileCategory" class="bg_ls span3"><a href="FileCategory.aspx"><i class="icon-folder-close"></i>File Category</a> </li>
+                    <li runat="server" id="liFileType" class="bg_lo span3"><a href="FileType.aspx"><i class="icon-folder-open"></i>File Type</a> </li>                    
+                    <li runat="server" id="liFile" class="bg_lb span3"><a href="FileAutoFormat.aspx"><i class="icon-file"></i>File</a> </li>
+                    <li runat="server" id="liMetadata" class="bg_lv span3"><a href="Metadata.aspx"><i class="icon-tags"></i>Metadata</a> </li>
                 </ul>
             </div>
             <!--End-Action boxes-->
 
             <!--Chart-box-->
-            <div class="row-fluid">
+            <div class="row-fluid" style="display:none">
                 <div class="widget-box">
                     <div class="widget-title bg_lg">
                         <span class="icon"><i class="icon-signal"></i></span>
@@ -39,17 +38,17 @@
                     </div>
                     <div class="widget-content">
                         <div class="row-fluid">
-                            <div class="span9">
+                            <%--<div class="span9">
                                 <div class="chart"></div>
-                            </div>
-                            <div class="span3">
+                            </div>--%>
+                            <div class="span12">
                                 <ul class="site-stats">
                                     <li class="bg_lh"><i class="icon-user"></i><strong>2540</strong> <small>Total Users</small></li>
                                     <li class="bg_lh"><i class="icon-plus"></i><strong>120</strong> <small>New Users </small></li>
                                     <li class="bg_lh"><i class="icon-shopping-cart"></i><strong>656</strong> <small>Total Shop</small></li>
                                     <li class="bg_lh"><i class="icon-tag"></i><strong>9540</strong> <small>Total Orders</small></li>
-                                    <li class="bg_lh"><i class="icon-repeat"></i><strong>10</strong> <small>Pending Orders</small></li>
-                                    <li class="bg_lh"><i class="icon-globe"></i><strong>8540</strong> <small>Online Orders</small></li>
+                                    <%--<li class="bg_lh"><i class="icon-repeat"></i><strong>10</strong> <small>Pending Orders</small></li>
+                                    <li class="bg_lh"><i class="icon-globe"></i><strong>8540</strong> <small>Online Orders</small></li>--%>
                                 </ul>
                             </div>
                         </div>

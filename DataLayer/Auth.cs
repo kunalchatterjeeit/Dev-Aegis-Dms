@@ -35,5 +35,22 @@ namespace DataLayer
                 return oDm.ExecuteNonQuery("usp_Login_Save");
             }
         }
+
+        public static string Permission_ByRoleId(int userId)
+        {
+            string retValue = string.Empty;
+            DataTable dtPermission = new DataTable();
+            using (DataManager oDm = new DataManager())
+            {
+                oDm.Add("p_UserId", MySqlDbType.Int32, userId);
+                oDm.CommandType = CommandType.StoredProcedure;
+                dtPermission = oDm.ExecuteDataTable("usp_Permission_ByRoleId");
+
+                foreach (DataRow drPermission in dtPermission.Rows)
+                    retValue += drPermission["PermissionId"].ToString() + ",";
+            }
+
+            return retValue;
+        }
     }
 }

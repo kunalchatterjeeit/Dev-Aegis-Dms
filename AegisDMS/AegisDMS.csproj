@@ -42,24 +42,32 @@
   <ItemGroup>
     <Reference Include="AjaxControlToolkit, Version=3.5.40412.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\AJAX DLL\AjaxControlToolkit.dll</HintPath>
+      <HintPath>bin\AjaxControlToolkit.dll</HintPath>
+    </Reference>
+    <Reference Include="itextsharp, Version=5.5.12.0, Culture=neutral, PublicKeyToken=8354ae6d2174ddca, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\iTextSharp.5.5.12\lib\itextsharp.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CSharp" />
-    <Reference Include="Microsoft.Office.Interop.Excel">
-      <HintPath>..\AJAX DLL\Microsoft.Office.Interop.Excel.dll</HintPath>
+    <Reference Include="Microsoft.Office.Interop.Excel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.Office.Interop.OneNote">
-      <HintPath>..\AJAX DLL\Microsoft.Office.Interop.OneNote.dll</HintPath>
+    <Reference Include="Microsoft.Office.Interop.OneNote, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.Office.Interop.PowerPoint">
-      <HintPath>..\AJAX DLL\Microsoft.Office.Interop.PowerPoint.dll</HintPath>
+    <Reference Include="Microsoft.Office.Interop.PowerPoint, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
     </Reference>
-    <Reference Include="Microsoft.Office.Interop.Word">
-      <HintPath>..\AJAX DLL\Microsoft.Office.Interop.Word.dll</HintPath>
+    <Reference Include="Microsoft.Office.Interop.Word, Version=15.0.0.0, Culture=neutral, PublicKeyToken=71e9bce111e9429c, processorArchitecture=MSIL">
       <EmbedInteropTypes>True</EmbedInteropTypes>
+    </Reference>
+    <Reference Include="PdfSharp, Version=1.50.4000.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\PdfSharp.1.50.4000-beta3b\lib\net20\PdfSharp.dll</HintPath>
+    </Reference>
+    <Reference Include="PdfSharp.Charting, Version=1.50.4000.0, Culture=neutral, PublicKeyToken=f94615aa0424f9eb, processorArchitecture=MSIL">
+      <SpecificVersion>False</SpecificVersion>
+      <HintPath>..\packages\PdfSharp.1.50.4000-beta3b\lib\net20\PdfSharp.Charting.dll</HintPath>
     </Reference>
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
@@ -92,6 +100,8 @@
     <Content Include="css\matrix-login.css" />
     <Content Include="css\matrix-media.css" />
     <Content Include="css\matrix-style.css" />
+    <Content Include="css\popup-control.css" />
+    <Content Include="css\popup-slider.css" />
     <Content Include="css\select2.css" />
     <Content Include="css\uniform.css" />
     <Content Include="Dashboard.aspx" />
@@ -99,7 +109,9 @@
     <Content Include="DisplayPdf.aspx" />
     <Content Include="DisplayVideo.aspx" />
     <Content Include="DisplayWord.aspx" />
+    <Content Include="error.html" />
     <Content Include="File.aspx" />
+    <Content Include="FileAutoFormat.aspx" />
     <Content Include="FileCategory.aspx" />
     <Content Include="FileType.aspx" />
     <Content Include="font-awesome\css\font-awesome.css" />
@@ -109,8 +121,11 @@
     <Content Include="img\breadcrumb.png" />
     <Content Include="img\custom\Aegis_Docu_Search.png" />
     <Content Include="img\custom\block_user.png" />
+    <Content Include="img\custom\dms_logo.jpg" />
+    <Content Include="img\custom\dms_logo_new.jpg" />
     <Content Include="img\custom\unblock_user.png" />
     <Content Include="img\custom\delete-button.png" />
+    <Content Include="img\custom\user-group-icon.png" />
     <Content Include="img\demo\av1.jpg" />
     <Content Include="img\demo\av2.jpg" />
     <Content Include="img\demo\av3.jpg" />
@@ -191,6 +206,7 @@
     <Content Include="js\custom.js" />
     <Content Include="js\excanvas.min.js" />
     <Content Include="js\fullcalendar.min.js" />
+    <Content Include="js\custom\popup-control.js" />
     <Content Include="js\jquery.dataTables.min.js" />
     <Content Include="js\jquery.easy-pie-chart.js" />
     <Content Include="js\jquery.flot.crosshair.js" />
@@ -202,6 +218,7 @@
     <Content Include="js\jquery.gritter.min.js" />
     <Content Include="js\jquery.min.js" />
     <Content Include="js\jquery.peity.min.js" />
+    <Content Include="js\jquery.slidedrawer.min.js" />
     <Content Include="js\jquery.ui.custom.js" />
     <Content Include="js\jquery.uniform.js" />
     <Content Include="js\jquery.validate.js" />
@@ -223,14 +240,18 @@
     <Content Include="js\wysihtml5-0.3.0.js" />
     <Content Include="Login.aspx" />
     <Content Include="Metadata.aspx" />
+    <Content Include="Role.aspx" />
+    <Content Include="RolePermission.aspx" />
     <Content Include="Search.aspx" />
     <Content Include="img\custom\searchicon.png" />
     <Content Include="User.aspx" />
+    <Content Include="UserGroup.aspx" />
     <Content Include="UserMessage.ascx" />
     <Content Include="Viewer.aspx" />
     <Content Include="Web.config">
       <SubType>Designer</SubType>
     </Content>
+    <Content Include="PopUp.aspx" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Dashboard.aspx.cs">
@@ -275,6 +296,13 @@
     <Compile Include="File.aspx.designer.cs">
       <DependentUpon>File.aspx</DependentUpon>
     </Compile>
+    <Compile Include="FileAutoFormat.aspx.cs">
+      <DependentUpon>FileAutoFormat.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="FileAutoFormat.aspx.designer.cs">
+      <DependentUpon>FileAutoFormat.aspx</DependentUpon>
+    </Compile>
     <Compile Include="FileCategory.aspx.cs">
       <DependentUpon>FileCategory.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -318,6 +346,20 @@
       <DependentUpon>Metadata.aspx</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Role.aspx.cs">
+      <DependentUpon>Role.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="Role.aspx.designer.cs">
+      <DependentUpon>Role.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="RolePermission.aspx.cs">
+      <DependentUpon>RolePermission.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="RolePermission.aspx.designer.cs">
+      <DependentUpon>RolePermission.aspx</DependentUpon>
+    </Compile>
     <Compile Include="Search.aspx.cs">
       <DependentUpon>Search.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -331,6 +373,13 @@
     </Compile>
     <Compile Include="User.aspx.designer.cs">
       <DependentUpon>User.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="UserGroup.aspx.cs">
+      <DependentUpon>UserGroup.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="UserGroup.aspx.designer.cs">
+      <DependentUpon>UserGroup.aspx</DependentUpon>
     </Compile>
     <Compile Include="UserMessage.ascx.cs">
       <DependentUpon>UserMessage.ascx</DependentUpon>
@@ -346,6 +395,13 @@
     <Compile Include="Viewer.aspx.designer.cs">
       <DependentUpon>Viewer.aspx</DependentUpon>
     </Compile>
+    <Compile Include="PopUp.aspx.cs">
+      <DependentUpon>PopUp.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="PopUp.aspx.designer.cs">
+      <DependentUpon>PopUp.aspx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <Content Include="MainLayout.Master" />
@@ -360,6 +416,7 @@
     <Content Include="img\demo\Thumbs.db" />
     <Content Include="img\icons\32\Thumbs.db" />
     <Content Include="img\Thumbs.db" />
+    <Content Include="packages.config" />
     <None Include="Properties\PublishProfiles\AegisDmsPublished.pubxml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -378,10 +435,7 @@
       <Name>Entity</Name>
     </ProjectReference>
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Files\Raw\" />
-    <Folder Include="Files\Temp\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
     <VSToolsPath Condition="'$(VSToolsPath)' == ''">$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)</VSToolsPath>
