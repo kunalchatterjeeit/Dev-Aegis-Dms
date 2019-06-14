@@ -366,63 +366,63 @@ namespace AegisDMS
                 foreach (HttpPostedFile fileItem in FileUpload1.PostedFiles)
                 {
                     Entity.File file = new Entity.File();
-                    if (io.Path.GetExtension(fileItem.FileName) == ".pdf")
-                    {
-                        string originalFullFileName = filepath + "\\Original\\" + fileItem.FileName;
-                        fileItem.SaveAs(originalFullFileName); //storing original file into ORIGINAL directory
-                        seperatedPdfFiles = SegregatedFiles(io.Path.GetFileName(fileItem.FileName)); //splitting and storing into CROPPED directory
-                        foreach (string pdfFile in seperatedPdfFiles)
-                        {
-                            file.FileTypeId = Convert.ToInt32(ddlFileType.SelectedValue);
-                            file.PhysicalFileName = string.Empty;
-                            file.FileOriginalName = io.Path.GetFileNameWithoutExtension(pdfFile);
-                            file.FileExtension = io.Path.GetExtension(pdfFile);
-                            file.EntryDate = Convert.ToDateTime(txtEntryDate.Text.Trim());
-                            file.IsFullTextCopied = false;
-                            file.IsAttachment = false;
-                            file.MainFileGuid = null;
-                            file.CreatedDate = DateTime.Now;
-                            file.CreatedBy = Convert.ToInt32(HttpContext.Current.User.Identity.Name);
-                            file.FileStatus = (int)Entity.FileStatus.Active;
+                    //if (io.Path.GetExtension(fileItem.FileName) == ".pdf")
+                    //{
+                    //    string originalFullFileName = filepath + "\\Original\\" + fileItem.FileName;
+                    //    fileItem.SaveAs(originalFullFileName); //storing original file into ORIGINAL directory
+                    //    seperatedPdfFiles = SegregatedFiles(io.Path.GetFileName(fileItem.FileName)); //splitting and storing into CROPPED directory
+                    //    foreach (string pdfFile in seperatedPdfFiles)
+                    //    {
+                    //        file.FileTypeId = Convert.ToInt32(ddlFileType.SelectedValue);
+                    //        file.PhysicalFileName = string.Empty;
+                    //        file.FileOriginalName = io.Path.GetFileNameWithoutExtension(pdfFile);
+                    //        file.FileExtension = io.Path.GetExtension(pdfFile);
+                    //        file.EntryDate = Convert.ToDateTime(txtEntryDate.Text.Trim());
+                    //        file.IsFullTextCopied = false;
+                    //        file.IsAttachment = false;
+                    //        file.MainFileGuid = null;
+                    //        file.CreatedDate = DateTime.Now;
+                    //        file.CreatedBy = Convert.ToInt32(HttpContext.Current.User.Identity.Name);
+                    //        file.FileStatus = (int)Entity.FileStatus.Active;
 
-                            //Saving file information
-                            retValue = BusinessLayer.File.FileSave(file);
+                    //        //Saving file information
+                    //        retValue = BusinessLayer.File.FileSave(file);
 
-                            //Uploading file
-                            if (retValue != null)
-                            {
-                                file.PhysicalFileName = retValue + file.FileExtension;
-                                //string fileWithFullPath = filepath + "\\Cropped\\" + io.Path.GetFileName(file.FileOriginalName + file.FileExtension);
-                                string fileWithFullPath = pdfFile;
-                                //fileItem.SaveAs(fileWithFullPath);
+                    //        //Uploading file
+                    //        if (retValue != null)
+                    //        {
+                    //            file.PhysicalFileName = retValue + file.FileExtension;
+                    //            //string fileWithFullPath = filepath + "\\Cropped\\" + io.Path.GetFileName(file.FileOriginalName + file.FileExtension);
+                    //            string fileWithFullPath = pdfFile;
+                    //            //fileItem.SaveAs(fileWithFullPath);
 
-                                //Build the File Path for the original (input) and the encrypted (output) file.
-                                string decryptedOriginalFileNameWithPath = fileWithFullPath;
-                                string encryptPhysicalFileNameWithPath = filepath + "\\" + file.PhysicalFileName;
-                                BusinessLayer.GeneralSecurity.EncryptFile(decryptedOriginalFileNameWithPath, encryptPhysicalFileNameWithPath);
+                    //            //Build the File Path for the original (input) and the encrypted (output) file.
+                    //            string decryptedOriginalFileNameWithPath = fileWithFullPath;
+                    //            string encryptPhysicalFileNameWithPath = filepath + "\\" + file.PhysicalFileName;
+                    //            BusinessLayer.GeneralSecurity.EncryptFile(decryptedOriginalFileNameWithPath, encryptPhysicalFileNameWithPath);
 
-                                //Saving metadata
-                                if (IsMetadataManual())
-                                {
-                                    MetadataFileMapping_Save(retValue);
-                                }
-                                else
-                                {
-                                    MetadataFileMapping_Save_pdf(retValue, pdfFile);
-                                }
+                    //            //Saving metadata
+                    //            if (IsMetadataManual())
+                    //            {
+                    //                MetadataFileMapping_Save(retValue);
+                    //            }
+                    //            else
+                    //            {
+                    //                MetadataFileMapping_Save_pdf(retValue, pdfFile);
+                    //            }
 
-                                //Saving user group
-                                UserGroupFileMapping_Save(retValue);
+                    //            //Saving user group
+                    //            UserGroupFileMapping_Save(retValue);
 
-                                //Delete the original cropped(input) file.
-                                System.IO.File.Delete(decryptedOriginalFileNameWithPath);
-                            }
-                        }
-                        //Delete the original full(input) file.
-                        System.IO.File.Delete(originalFullFileName);
-                    }
-                    else
-                    {
+                    //            //Delete the original cropped(input) file.
+                    //            System.IO.File.Delete(decryptedOriginalFileNameWithPath);
+                    //        }
+                    //    }
+                    //    //Delete the original full(input) file.
+                    //    System.IO.File.Delete(originalFullFileName);
+                    //}
+                    //else
+                    //{
                         file.FileTypeId = Convert.ToInt32(ddlFileType.SelectedValue);
                         file.PhysicalFileName = string.Empty;
                         file.FileOriginalName = io.Path.GetFileNameWithoutExtension(fileItem.FileName);
@@ -467,7 +467,7 @@ namespace AegisDMS
 
                         //Saving user group
                         UserGroupFileMapping_Save(retValue);
-                    }
+                   // }
                 }
             }
             return retValue;

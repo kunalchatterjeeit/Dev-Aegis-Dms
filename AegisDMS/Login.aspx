@@ -17,17 +17,15 @@
 <body>
     <form id="form1" runat="server">
         <div id="loginbox" >
-              <img src="img/custom/dms_logo.jpg" id="dms_logo" alt="Logo" style="margin-left:150px;"  />
-            <img src="img/custom/Aegis_Docu_Search.png" id="Aegis_Docu_Search" style="margin-left:140px;margin-top:0px;height:100px;width:150px; margin-top:10px;"/>
-           
-            
+            <div class="control-group normal_text" style="background-color:#cccccc">
+            <img src="img/logo.png" style="height:13vh" />
+                </div>
             <form id="loginform" class="form-vertical">
-                <div class="control-group normal_text">
-                    <h3>
-                       
+                <%--<div class="control-group normal_text">
+                    <h3>                       
                         Aegis Docu-Search
                     </h3>
-                </div>
+                </div>--%>
                 <div class="control-group">
                     <div class="controls">
                         <div class="main_input_box">

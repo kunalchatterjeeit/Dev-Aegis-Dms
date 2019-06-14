@@ -25,7 +25,7 @@
         <asp:ToolkitScriptManager ID="ToolkitScriptManager1" runat="server">
         </asp:ToolkitScriptManager>
         <div>
-            <iframe id="iframe" runat="server" class="viewer" style="width: 100%; height: 90vh;"></iframe>
+            <asp:HtmlIframe id="iframe" runat="server" class="viewer" style="width: 100%; height: 90vh;"></asp:HtmlIframe>
         </div>
         <section class="drawer">
             <!-- <div> -->

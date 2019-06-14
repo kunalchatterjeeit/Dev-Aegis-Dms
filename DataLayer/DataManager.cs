@@ -3,6 +3,7 @@ using System.Data;
 using System.Data.SqlClient;
 using MySql.Data.MySqlClient;
 using System.Text;
+using System.Configuration;
 
 namespace DataLayer
 {
@@ -28,7 +29,7 @@ namespace DataLayer
                 //Decode.GetChars(todecode_byte, 0, todecode_byte.Length, decoded_char, 0);
                 //strConnectionString = new String(decoded_char);
 
-                strConnectionString = System.Configuration.ConfigurationSettings.AppSettings["ConnectionString"].ToString();
+                strConnectionString = ConfigurationManager.ConnectionStrings["constr"].ToString();
 			}
 			~DataManager()
 			{
