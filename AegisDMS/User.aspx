@@ -2,10 +2,7 @@
 
 <%@ Register Src="~/UserMessage.ascx" TagPrefix="uc1" TagName="UserMessage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    <link rel='stylesheet prefetch' href='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/magnific-popup.css' />
-    <link href="css/popup-control.css" rel="stylesheet" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/prefixfree/1.0.7/prefixfree.min.js"></script>
-    <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+    
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
@@ -18,9 +15,9 @@
                     <div id="breadcrumb"><a href="Dashboard.aspx" title="Go to Home" class="tip-bottom"><i class="icon-home"></i>Home</a></div>
                     <h4>
                         <uc1:UserMessage runat="server" ID="UserMessage" />
+                    </h4>
                 </div>
                 <!--End-breadcrumbs-->
-
                 <div class="container-fluid">
                     <div class="row-fluid">
                         <div class="span6">
@@ -76,8 +73,8 @@
                                             <div class="control-group">
                                                 <label class="control-label">Roles :</label>
                                                 <div class="controls">
-                                                   <%-- <asp:CheckBoxList ID="chkRole" runat="server" AutoPostBack="True" OnSelectedIndexChanged="chkRole_SelectedIndexChanged" RepeatDirection="Vertical">
-                                                    </asp:CheckBoxList>--%>
+                                                    <asp:CheckBoxList ID="chkRole" runat="server" AutoPostBack="True" OnSelectedIndexChanged="chkRole_SelectedIndexChanged" RepeatDirection="Vertical">
+                                                    </asp:CheckBoxList>
                                                     <asp:GridView ID="gvRole" runat="server" class="table table-bordered table-striped"
                                                         AutoGenerateColumns="false">
                                                         <Columns>
@@ -180,14 +177,14 @@
                                                             ImageAlign="AbsMiddle" ToolTip='<%# (Eval("Status").ToString() == "1")?"BLOCK USER":"UNBLOCK USER" %>' Width="20px" Height="20px" />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                                <asp:TemplateField>
+                                              <%--  <asp:TemplateField>
                                                     <ItemTemplate>
                                                         <div class="inline-popups">
                                                             <asp:ImageButton ID="ImageButton1" runat="server" ImageUrl="~/img/custom/user-group-icon.png" CausesValidation="false" CommandName="UG" Width="20px" Height="20px" />
 
                                                         </div>
                                                     </ItemTemplate>
-                                                </asp:TemplateField>
+                                                </asp:TemplateField>--%>
                                             </Columns>
                                             <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
                                             <HeaderStyle BackColor="#0349AA" Font-Bold="True" ForeColor="White" />
@@ -209,7 +206,7 @@
             <!--end-main-container-part-->
             <%--<a id="anchorUserGroup" href="#test-popup" data-effect="mfp-3d-unfold"></a>--%>
             <!-- Popup itself -->
-            <div id="test-popup" class="white-popup mfp-with-anim mfp-hide">
+            <%--<div id="test-popup" class="white-popup mfp-with-anim mfp-hide">
                 <div class="widget-box">
                     <div class="widget-title">
                         <span class="icon"><i class="icon-align-justify"></i></span>
@@ -252,22 +249,10 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div>--%>
         </ContentTemplate>
     </asp:UpdatePanel>
     <script src='http://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js'></script>
     <script src='https://cdnjs.cloudflare.com/ajax/libs/magnific-popup.js/1.1.0/jquery.magnific-popup.min.js'></script>
     <script src="js/custom/popup-control.js"></script>
-    <script type="text/javascript">
-        function LoadUserGroupUserwise(anchr) {
-            //alert(anchr);
-
-        }
-    </script>
-    <script type="text/javascript">
-        $(function () {
-            alert();
-            $('#anchorUserGroup').click();
-        });
-    </script>
 </asp:Content>

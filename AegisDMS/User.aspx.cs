@@ -22,8 +22,8 @@ namespace AegisDMS
             gvUser.DataSource = BusinessLayer.User.UserGetAll(new Entity.User());
             gvUser.DataBind();
 
-            gvUserGroup.DataSource = BusinessLayer.User.UserGetAll(new Entity.User());
-            gvUserGroup.DataBind();
+            //gvUserGroup.DataSource = BusinessLayer.User.UserGetAll(new Entity.User());
+            //gvUserGroup.DataBind();
         }
         private int User_Save()
         {
@@ -215,7 +215,7 @@ namespace AegisDMS
             }
             if (e.CommandName == "UG")
             {
-
+                
             }
         }
 
