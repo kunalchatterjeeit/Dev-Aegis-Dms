@@ -45,6 +45,14 @@
                         </div>
                         <div class="widget-content">
                             <div class="form-horizontal">
+                                 <div class="control-group">
+                                    <label for="checkboxes" class="control-label">User Group:</label>
+                                    <div class="controls">
+                                        <asp:CheckBoxList ID="chkUserGroup" runat="server" AutoPostBack="True" OnSelectedIndexChanged="CheckListBox_SelectedIndexChanged">
+                                            <asp:ListItem Value="900" Text=""></asp:ListItem>
+                                        </asp:CheckBoxList>
+                                    </div>
+                                </div>
                                 <div class="control-group">
                                     <label for="checkboxes" class="control-label">User :</label>
                                     <div class="controls">
