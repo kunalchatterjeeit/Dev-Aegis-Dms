@@ -26,6 +26,7 @@ namespace AegisDMS
                 liSearch.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.SEARCH);
                 liUser.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.USER);
                 liUserRole.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.USERROLE);
+                liUserGroup.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.USERGROUP);
             }
         }
     }

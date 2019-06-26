@@ -46,17 +46,18 @@ namespace AegisDMS
         {
             int retValue = 0;
 
-            foreach (DataRow drRole in gvRole.Rows)
-            { 
-            
-            }
-            for (int index = 0; index < chkRole.Items.Count; index++)
+            foreach (GridViewRow gvrRole in gvRole.Rows)
             {
-                if (!chkRole.Items[index].Value.Equals("*"))
-                {
-                    retValue += BusinessLayer.User.UserRole_Save(userId, Convert.ToInt32(chkRole.Items[index].Value), chkRole.Items[index].Selected);
-                }
+                CheckBox chkRole = (CheckBox)gvrRole.FindControl("chkRole");
+                retValue += BusinessLayer.User.UserRole_Save(userId, Convert.ToInt32(gvRole.DataKeys[gvrRole.RowIndex].Values[0].ToString()), chkRole.Checked);
             }
+            //for (int index = 0; index < chkRole.Items.Count; index++)
+            //{
+            //    if (!chkRole.Items[index].Value.Equals("*"))
+            //    {
+            //        retValue += BusinessLayer.User.UserRole_Save(userId, Convert.ToInt32(chkRole.Items[index].Value), chkRole.Items[index].Selected);
+            //    }
+            //}
 
             return retValue;
         }
@@ -215,7 +216,7 @@ namespace AegisDMS
             }
             if (e.CommandName == "UG")
             {
-                
+
             }
         }
 
@@ -232,18 +233,18 @@ namespace AegisDMS
             }
         }
 
-        protected void chkRole_SelectedIndexChanged(object sender, EventArgs e)
-        {
-            int indexOne = Convert.ToInt32(Request.Form["__EVENTTARGET"].Substring(Request.Form["__EVENTTARGET"].LastIndexOf('$') + 1));
-            if (indexOne == 0)
-            {
-                bool isChecked = chkRole.Items[indexOne].Selected ? true : false;
-                foreach (ListItem item in chkRole.Items)
-                {
-                    item.Selected = isChecked;
-                }
-            }
-        }
+        //protected void chkRole_SelectedIndexChanged(object sender, EventArgs e)
+        //{
+        //    int indexOne = Convert.ToInt32(Request.Form["__EVENTTARGET"].Substring(Request.Form["__EVENTTARGET"].LastIndexOf('$') + 1));
+        //    if (indexOne == 0)
+        //    {
+        //        bool isChecked = chkRole.Items[indexOne].Selected ? true : false;
+        //        foreach (ListItem item in chkRole.Items)
+        //        {
+        //            item.Selected = isChecked;
+        //        }
+        //    }
+        //}
         void HtmlAnchor_Click(Object sender, EventArgs e)
         {
             // your code here

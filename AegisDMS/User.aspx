@@ -2,7 +2,6 @@
 
 <%@ Register Src="~/UserMessage.ascx" TagPrefix="uc1" TagName="UserMessage" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
-    
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:ScriptManager ID="ScriptManager1" runat="server"></asp:ScriptManager>
@@ -20,7 +19,7 @@
                 <!--End-breadcrumbs-->
                 <div class="container-fluid">
                     <div class="row-fluid">
-                        <div class="span6">
+                        <div class="span12">
                             <div class="widget-box">
                                 <div class="widget-title">
                                     <span class="icon"><i class="icon-align-justify"></i></span>
@@ -37,13 +36,13 @@
                                         <div class="control-group">
                                             <label class="control-label">User name :</label>
                                             <div class="controls">
-                                                <asp:TextBox ID="txtUserName" runat="server" class="span11" placeholder="User name"></asp:TextBox>
+                                                <asp:TextBox ID="txtUserName" runat="server" class="span11" placeholder="User name" autocomplete="off"></asp:TextBox>
                                             </div>
                                         </div>
                                         <div class="control-group">
                                             <label class="control-label">Password</label>
                                             <div class="controls">
-                                                <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" class="span11" placeholder="Enter password"></asp:TextBox>
+                                                <asp:TextBox ID="txtPassword" runat="server" TextMode="Password" class="span11" placeholder="Enter password" autocomplete="off"></asp:TextBox>
                                             </div>
                                         </div>
                                         <div class="control-group">
@@ -53,15 +52,13 @@
                                                 <asp:CompareValidator ID="CompareValidator1" runat="server" Style="color: red;" ErrorMessage="Didn't match, please re-enter password." ControlToCompare="txtPassword" ControlToValidate="txtConfirmPassword"></asp:CompareValidator>
                                             </div>
                                         </div>
-                                        <div class="control-group">
-                                            <asp:Button ID="btnSave" runat="server" Text="Save" class="btn btn-success" OnClick="btnSave_Click" />
-                                            <asp:Button ID="btnCancel" runat="server" Text="Cancel" class="btn btn-danger" OnClick="btnCancel_Click" />
-                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <div class="span6">
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
                             <div class="widget-box">
                                 <div class="widget-title">
                                     <span class="icon"><i class="icon-align-justify"></i></span>
@@ -73,10 +70,8 @@
                                             <div class="control-group">
                                                 <label class="control-label">Roles :</label>
                                                 <div class="controls">
-                                                    <asp:CheckBoxList ID="chkRole" runat="server" AutoPostBack="True" OnSelectedIndexChanged="chkRole_SelectedIndexChanged" RepeatDirection="Vertical">
-                                                    </asp:CheckBoxList>
                                                     <asp:GridView ID="gvRole" runat="server" class="table table-bordered table-striped"
-                                                        AutoGenerateColumns="false">
+                                                        AutoGenerateColumns="false" DataKeyNames="RoleId">
                                                         <Columns>
                                                             <asp:TemplateField>
                                                                 <HeaderTemplate>
@@ -119,7 +114,7 @@
                         </div>
                     </div>
                     <div class="row-fluid">
-                        <div class="span6">
+                        <div class="span12">
                             <div class="widget-box">
                                 <div class="widget-title">
                                     <span class="icon"><i class="icon-align-justify"></i></span>
@@ -139,8 +134,15 @@
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="control-group">
+                                <asp:Button ID="btnSave" runat="server" Text="Save" class="btn btn-success" OnClick="btnSave_Click" />
+                                <asp:Button ID="btnCancel" runat="server" Text="Cancel" class="btn btn-danger" OnClick="btnCancel_Click" />
+                            </div>
                         </div>
-                        <div class="span6">
+                    </div>
+                    <div class="row-fluid">
+                        <div class="span12">
                             <div class="widget-box">
                                 <div class="widget-title">
                                     <span class="icon"><i class="icon-align-justify"></i></span>
@@ -177,14 +179,13 @@
                                                             ImageAlign="AbsMiddle" ToolTip='<%# (Eval("Status").ToString() == "1")?"BLOCK USER":"UNBLOCK USER" %>' Width="20px" Height="20px" />
                                                     </ItemTemplate>
                                                 </asp:TemplateField>
-                                              <%--  <asp:TemplateField>
+                                                <asp:TemplateField>
                                                     <ItemTemplate>
                                                         <div class="inline-popups">
                                                             <asp:ImageButton ID="ImageButton1" runat="server" ImageUrl="~/img/custom/user-group-icon.png" CausesValidation="false" CommandName="UG" Width="20px" Height="20px" />
-
                                                         </div>
                                                     </ItemTemplate>
-                                                </asp:TemplateField>--%>
+                                                </asp:TemplateField>
                                             </Columns>
                                             <FooterStyle BackColor="#5D7B9D" Font-Bold="True" ForeColor="White" />
                                             <HeaderStyle BackColor="#0349AA" Font-Bold="True" ForeColor="White" />

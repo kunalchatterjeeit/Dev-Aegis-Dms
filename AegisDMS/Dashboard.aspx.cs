@@ -21,6 +21,8 @@ namespace AegisDMS
                 liMetadata.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.METADATA);
                 liRolePermission.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.ROLEPERMISSION);
                 liUser.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.USER);
+                liRole.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.USERROLE);
+                liUserGroup.Visible = HttpContext.Current.User.IsInRole(Entity.Utility.USERGROUP);
             }
         }
     }

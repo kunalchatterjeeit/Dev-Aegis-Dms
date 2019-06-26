@@ -16,5 +16,6 @@ namespace Entity
         public const string METADATA = "600";
         public const string FILE = "700";
         public const string SEARCH = "800";
+        public const string USERGROUP = "900";
     }
 }
