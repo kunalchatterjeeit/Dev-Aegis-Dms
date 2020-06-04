@@ -8,6 +8,8 @@
         public string Client { get; set; }
         public string FailedUserName { get; set; }
         public string FailedPassword { get; set; }
+        public string Username { get; set; }
+        public string Password { get; set; }
     }
 
     public enum LoginStatus

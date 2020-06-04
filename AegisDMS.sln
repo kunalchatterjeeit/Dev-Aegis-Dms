@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio 14
-VisualStudioVersion = 14.0.25420.1
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.29230.47
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Entity", "Entity\Entity.csproj", "{7F3F6CD9-D22D-41C4-8FA5-08B1B145E276}"
 EndProject
@@ -10,6 +10,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLayer", "BusinessLayer\BusinessLayer.csproj", "{2D7872E9-4863-4062-977B-27D5006E7F67}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AegisDMS", "AegisDMS\AegisDMS.csproj", "{5F42D2AF-D657-4179-A1D4-C124B9081D76}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Api.Dms", "Api.Dms\Api.Dms.csproj", "{BBAC1AAC-F209-425C-A5C6-D3484909D4C8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,8 +35,15 @@ Global
 		{5F42D2AF-D657-4179-A1D4-C124B9081D76}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5F42D2AF-D657-4179-A1D4-C124B9081D76}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5F42D2AF-D657-4179-A1D4-C124B9081D76}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BBAC1AAC-F209-425C-A5C6-D3484909D4C8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BBAC1AAC-F209-425C-A5C6-D3484909D4C8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BBAC1AAC-F209-425C-A5C6-D3484909D4C8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BBAC1AAC-F209-425C-A5C6-D3484909D4C8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {4E8A31AE-4EE7-428F-A75F-8A20856D6EEC}
 	EndGlobalSection
 EndGlobal
