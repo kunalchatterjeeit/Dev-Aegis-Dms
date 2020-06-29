@@ -33,7 +33,7 @@ namespace AegisDMS
                 UserId = 0,
                 Name = txtName.Text.Trim(),
                 Username = txtUserName.Text.Trim(),
-                Password = txtPassword.Text.Trim().ToEncrypt(true),
+                Password = txtPassword.Text.Trim().EncodePasswordToBase64(),
                 CreatedBy = Convert.ToInt32(HttpContext.Current.User.Identity.Name),
                 Status = (int)UserStatus.Active
             };
@@ -130,6 +130,12 @@ namespace AegisDMS
         }
         protected void btnSave_Click(object sender, EventArgs e)
         {
+            if (string.IsNullOrEmpty(txtPassword.Text.Trim()))
+            {
+                UserMessage.Text = "Please enter password.";
+                UserMessage.Css = BusinessLayer.MessageCssClass.Error;
+                return;
+            }
             int retValue = User_Save();
 
             if (retValue > 0)

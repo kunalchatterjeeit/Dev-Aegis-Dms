@@ -6,29 +6,54 @@ using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Cors;
 
 namespace Api.Dms.Controllers
 {
+    //[EnableCors(origins: "*", headers: "*", methods: "*")]
     public class LoginController : ApiController
     {
         [HttpPost]
         public HttpResponseMessage Index(Entity.Auth model)
         {
-            if (ModelState.IsValid && model != null)
+            HttpResponseMessage responseMessage = new HttpResponseMessage();
+            try
             {
-                object token = null;
-                DataTable userDetails = GeneralSecurity.LogOn(model.Username.Trim());
-                if (userDetails != null && userDetails.Rows.Count > 0)
+                if (ModelState.IsValid && model != null)
                 {
-                    string passowrd = userDetails.Rows[0][1].ToString();
-                    if (passowrd.Equals(model.Password.Trim().ToEncrypt(true)))
+                    object token = null;
+                    DataTable userDetails = GeneralSecurity.LogOn(model.Username.Trim());
+                    if (userDetails != null && userDetails.Rows.Count > 0)
                     {
-                        token = new Authentication().GetToken(Request, userDetails.Rows[0]["UserId"].ToString());
-                        return Request.CreateResponse(HttpStatusCode.OK, token);
+                        string passowrd = userDetails.Rows[0][1].ToString();
+                        if (passowrd.Equals(model.Password.Trim().EncodePasswordToBase64()))
+                        {
+                            model.Token = new Authentication().GetToken(Request, userDetails.Rows[0]["UserId"].ToString());
+                            model.Status = Entity.LoginStatus.Success;
+                            responseMessage = Request.CreateResponse(HttpStatusCode.OK, model);
+                        }
+                        else
+                        {
+                            model.Status = Entity.LoginStatus.WrongPassword;
+                            model.Message = "Invalid Username/Password";
+                            responseMessage = Request.CreateResponse(HttpStatusCode.OK, model);
+                        }
+                    }
+                    else
+                    {
+                        model.Status = Entity.LoginStatus.Failed;
+                        model.Message = "Invalid Username/Password";
+                        responseMessage = Request.CreateResponse(HttpStatusCode.OK, model);
                     }
                 }
             }
-            return Request.CreateResponse(HttpStatusCode.OK, "Invalid Username/Password");
+            catch (Exception ex)
+            {
+                model.Status = Entity.LoginStatus.Failed;
+                model.Message = ex.Message;
+                responseMessage = Request.CreateResponse(HttpStatusCode.OK, model);
+            }
+            return responseMessage;
         }
     }
 }

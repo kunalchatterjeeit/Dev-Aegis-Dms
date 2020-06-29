@@ -17,6 +17,8 @@ namespace Entity
         public string Password { get; set; }
         public int CreatedBy { get; set; }
         public int Status { get; set; }
+        public string EmailId { get; set; }
+        public int DesignationId { get; set; }
     }
 
     public enum UserStatus

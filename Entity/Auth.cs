@@ -10,6 +10,8 @@
         public string FailedPassword { get; set; }
         public string Username { get; set; }
         public string Password { get; set; }
+        public object Token { get; set; }
+        public string Message { get; set; }
     }
 
     public enum LoginStatus

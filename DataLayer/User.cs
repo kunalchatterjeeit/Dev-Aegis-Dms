@@ -23,6 +23,8 @@ namespace DataLayer
                 oDm.Add("p_Password", MySqlDbType.VarChar, user.Password);
                 oDm.Add("p_CreatedBy", MySqlDbType.Int32, user.CreatedBy);
                 oDm.Add("p_Status", MySqlDbType.Int32, user.Status);
+                oDm.Add("p_EmailId", MySqlDbType.VarChar, user.EmailId);
+                oDm.Add("p_DesignationId", MySqlDbType.Int32, user.DesignationId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
                 retValue = oDm.ExecuteNonQuery("usp_User_Save");

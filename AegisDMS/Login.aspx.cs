@@ -56,7 +56,7 @@ namespace AegisDMS
                 if (userDetails != null && userDetails.Rows.Count > 0)
                 {
                     string passowrd = (userDetails).Rows[0][1].ToString();
-                    if (passowrd.Equals(txtPassword.Text.Trim().ToEncrypt(true)))
+                    if (passowrd.Equals(txtPassword.Text.Trim().EncodePasswordToBase64()))
                     {
                         string roles = BusinessLayer.GeneralSecurity.Permission_ByRoleId(Convert.ToInt32(userDetails.Rows[0]["UserId"].ToString()));
                         FormsAuthenticationTicket authTicket = new FormsAuthenticationTicket(
