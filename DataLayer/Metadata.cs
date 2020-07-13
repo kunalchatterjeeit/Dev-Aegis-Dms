@@ -27,8 +27,9 @@ namespace DataLayer
             }
         }
 
-        public static DataTable Metadata_GetAll(Entity.Metadata metadata)
+        public static List<Entity.Metadata> Metadata_GetAll(Entity.Metadata metadata)
         {
+            List<Entity.Metadata> metadatas = new List<Entity.Metadata>();
             using (DataManager oDm = new DataManager())
             {
                 if (metadata.MetadataId == 0)
@@ -52,7 +53,24 @@ namespace DataLayer
                     oDm.Add("p_Name", MySqlDbType.VarChar, metadata.Name);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_Metadata_GetAll");
+                using (MySqlDataReader reader = oDm.ExecuteReader("usp_Metadata_GetAll"))
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            metadatas.Add(new Entity.Metadata()
+                            {
+                                MetadataId = Convert.ToInt32(reader["MetaDataId"].ToString()),
+                                FileTypeId = Convert.ToInt32(reader["FileTypeId"].ToString()),
+                                FileCategoryId = Convert.ToInt32(reader["FileCategoryId"].ToString()),
+                                Name = reader["Name"].ToString(),
+                                Note = reader["Note"].ToString()
+                            });
+                        }
+                    }
+                }
+                return metadatas;
             }
         }
 

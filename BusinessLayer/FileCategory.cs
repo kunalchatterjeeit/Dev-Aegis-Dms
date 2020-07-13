@@ -11,17 +11,17 @@ namespace BusinessLayer
         public FileCategory()
         { }
 
-        public static int FileCategorySave(Entity.FileCategory fileCategory)
+        public int FileCategorySave(Entity.FileCategory fileCategory)
         {
             return DataLayer.FileCategory.FileCategory_Save(fileCategory);
         }
 
-        public static DataTable FileCategoryGetAll(Entity.FileCategory fileCategory)
+        public List<Entity.FileCategory> FileCategoryGetAll(Entity.FileCategory fileCategory)
         {
             return DataLayer.FileCategory.FileCategory_GetAll(fileCategory);
         }
 
-        public static int FileCategoryDelete(int fileCategoryId)
+        public int FileCategoryDelete(int fileCategoryId)
         {
             return DataLayer.FileCategory.FileCategory_Delete(fileCategoryId);
         }

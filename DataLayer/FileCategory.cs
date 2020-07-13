@@ -25,20 +25,29 @@ namespace DataLayer
             }
         }
 
-        public static DataTable FileCategory_GetAll(Entity.FileCategory fileCategory)
+        public static List<Entity.FileCategory> FileCategory_GetAll(Entity.FileCategory fileCategory)
         {
+            List<Entity.FileCategory> fileCategories = new List<Entity.FileCategory>();
             using (DataManager oDm = new DataManager())
             {
-                if (fileCategory.FileCategoryId == 0)
-                {
-                    oDm.Add("p_FileCategoryId", MySqlDbType.Int64, DBNull.Value);
-                }
-                else
-                {
-                    oDm.Add("p_FileCategoryId", MySqlDbType.Int64, fileCategory.FileCategoryId);
-                }
+                oDm.Add("p_FileCategoryId", MySqlDbType.Int64, fileCategory.FileCategoryId > 0 ? (object)fileCategory.FileCategoryId : DBNull.Value);
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_FileCategory_GetAll");
+                using (MySqlDataReader reader = oDm.ExecuteReader("usp_FileCategory_GetAll"))
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            fileCategories.Add(new Entity.FileCategory()
+                            {
+                                FileCategoryId = Convert.ToInt32(reader["FileCategoryId"].ToString()),
+                                Name = reader["Name"].ToString(),
+                                Note = reader["Note"].ToString()
+                            });
+                        }
+                    }
+                }
+                return fileCategories;
             }
         }
 

@@ -25,8 +25,9 @@ namespace DataLayer
             }
         }
 
-        public static DataTable FileType_GetAll(Entity.FileType fileType)
+        public static List<Entity.FileType> FileType_GetAll(Entity.FileType fileType)
         {
+            List<Entity.FileType> fileTypes = new List<Entity.FileType>();
             using (DataManager oDm = new DataManager())
             {
                 if (fileType.FileCategoryId == 0)
@@ -45,7 +46,23 @@ namespace DataLayer
                     oDm.Add("p_FileTypeId", MySqlDbType.Int32, fileType.FileTypeId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_FileType_GetAll");
+                using (MySqlDataReader reader = oDm.ExecuteReader("usp_FileType_GetAll"))
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            fileTypes.Add(new Entity.FileType()
+                            {
+                                FileTypeId = Convert.ToInt32(reader["FileTypeId"].ToString()),
+                                FileCategoryId = Convert.ToInt32(reader["FileCategoryId"].ToString()),
+                                Name = reader["Name"].ToString(),
+                                Note = reader["Note"].ToString()
+                            });
+                        }
+                    }
+                }
+                return fileTypes;
             }
         }
 

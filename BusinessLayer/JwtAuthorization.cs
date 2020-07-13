@@ -38,10 +38,12 @@ namespace BusinessLayer
 
                         if (!string.IsNullOrEmpty(userId) && issueTime.AddHours(8) > DateTime.UtcNow)
                         {
-                            string roles = BusinessLayer.GeneralSecurity.Permission_ByRoleId(Convert.ToInt32(userId));
-                            Roles = roles.Split(',').ToList();
-                            //if(Roles.Any(r=>r==))
-                            filterContext.ControllerContext.RequestContext.Principal = new GenericPrincipal(new GenericIdentity(userId), Roles.ToArray());
+                            string roleStr = BusinessLayer.GeneralSecurity.Permission_ByRoleId(Convert.ToInt32(userId));
+                            List<string> roles = roleStr.Split(',').ToList();
+                            if (roles.Any(r => Roles.Contains(r)))
+                                filterContext.ControllerContext.RequestContext.Principal = new GenericPrincipal(new GenericIdentity(userId), Roles.ToArray());
+                            else
+                                HandleUnauthorizedRequest(filterContext);
                         }
                         else
                             HandleUnauthorizedRequest(filterContext);

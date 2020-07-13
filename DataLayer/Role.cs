@@ -1,6 +1,7 @@
 ﻿
 using MySql.Data.MySqlClient;
 using System;
+using System.Collections.Generic;
 using System.Data;
 namespace DataLayer
 {
@@ -19,12 +20,29 @@ namespace DataLayer
             }
         }
 
-        public static DataTable Role_GetAll()
+        public static List<Entity.Role> Role_GetAll(int roleId)
         {
+            List<Entity.Role> roles = new List<Entity.Role>();
             using (DataManager oDm = new DataManager())
             {
+                oDm.Add("p_RoleId", MySqlDbType.Int64, roleId == 0 ? DBNull.Value : (object)roleId);
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_Role_GetAll");
+                using (MySqlDataReader reader = oDm.ExecuteReader("usp_Role_GetAll"))
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            roles.Add(new Entity.Role()
+                            {
+                                RoleId = Convert.ToInt32(reader["RoleId"].ToString()),
+                                Name = reader["Name"].ToString(),
+                                Note = reader["Note"].ToString()
+                            });
+                        }
+                    }
+                }
+                return roles;
             }
         }
 
@@ -52,15 +70,32 @@ namespace DataLayer
             }
         }
 
-        public static DataTable RolePermission_GetByRoleId(int roleId)
+        public static List<Entity.RolePermission> RolePermission_GetByRoleId(int roleId)
         {
+            List<Entity.RolePermission> rolePermissions = new List<Entity.RolePermission>();
             using (DataManager oDm = new DataManager())
             {
                 oDm.Add("p_RoleId", MySqlDbType.Int32, roleId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_RolePermission_GetByRoleId");
+                using (MySqlDataReader reader = oDm.ExecuteReader("usp_Role_GetAll"))
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            rolePermissions.Add(new Entity.RolePermission()
+                            {
+                                RolePermissionId = Convert.ToInt32(reader["RolePermission"].ToString()),
+                                RoleId = Convert.ToInt32(reader["RoleId"].ToString()),
+                                PermissionId = Convert.ToInt32(reader["PermissionId"].ToString()),
+                                IsEnabled = Convert.ToBoolean(reader["IsEnabled"].ToString())
+                            });
+                        }
+                    }
+                }
             }
+            return rolePermissions;
         }
     }
 }

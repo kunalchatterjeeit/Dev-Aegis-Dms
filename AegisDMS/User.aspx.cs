@@ -17,14 +17,14 @@ namespace AegisDMS
             get { return Convert.ToInt64(ViewState["UserGroupUserMappingId"]); }
             set { ViewState["UserGroupUserMappingId"] = value; }
         }
-        private void User_GetAll()
-        {
-            gvUser.DataSource = BusinessLayer.User.UserGetAll(new Entity.User());
-            gvUser.DataBind();
+        //private void User_GetAll()
+        //{
+        //    gvUser.DataSource = BusinessLayer.User.UserGetAll(new Entity.User());
+        //    gvUser.DataBind();
 
-            //gvUserGroup.DataSource = BusinessLayer.User.UserGetAll(new Entity.User());
-            //gvUserGroup.DataBind();
-        }
+        //    //gvUserGroup.DataSource = BusinessLayer.User.UserGetAll(new Entity.User());
+        //    //gvUserGroup.DataBind();
+        //}
         private int User_Save()
         {
             int retValue = 0;
@@ -35,10 +35,10 @@ namespace AegisDMS
                 Username = txtUserName.Text.Trim(),
                 Password = txtPassword.Text.Trim().EncodePasswordToBase64(),
                 CreatedBy = Convert.ToInt32(HttpContext.Current.User.Identity.Name),
-                Status = (int)UserStatus.Active
+                //Status = (int)UserStatus.Active
             };
 
-            retValue = BusinessLayer.User.UserSave(user);
+            //retValue = BusinessLayer.User.UserSave(user);
 
             return retValue;
         }
@@ -49,7 +49,7 @@ namespace AegisDMS
             foreach (GridViewRow gvrRole in gvRole.Rows)
             {
                 CheckBox chkRole = (CheckBox)gvrRole.FindControl("chkRole");
-                retValue += BusinessLayer.User.UserRole_Save(userId, Convert.ToInt32(gvRole.DataKeys[gvrRole.RowIndex].Values[0].ToString()), chkRole.Checked);
+                //retValue += BusinessLayer.User.UserRole_Save(userId, Convert.ToInt32(gvRole.DataKeys[gvrRole.RowIndex].Values[0].ToString()), chkRole.Checked);
             }
             //for (int index = 0; index < chkRole.Items.Count; index++)
             //{
@@ -123,7 +123,7 @@ namespace AegisDMS
         {
             if (!IsPostBack)
             {
-                User_GetAll();
+                //User_GetAll();
                 Role_GetAll();
                 UserGroup_GetAll();
             }
@@ -149,7 +149,7 @@ namespace AegisDMS
                         if (UserGroupUserMapping_Save(Convert.ToInt32(userDetails.Rows[0]["UserId"].ToString())) > 0)
                         {
                             Clear();
-                            User_GetAll();
+                            //User_GetAll();
 
                             UserMessage.Text = "Saved.";
                             UserMessage.Css = BusinessLayer.MessageCssClass.Success;
@@ -180,51 +180,51 @@ namespace AegisDMS
         protected void gvUser_PageIndexChanging(object sender, GridViewPageEventArgs e)
         {
             gvUser.PageIndex = e.NewPageIndex;
-            User_GetAll();
+            //User_GetAll();
         }
-        protected void gvUser_RowCommand(object sender, GridViewCommandEventArgs e)
-        {
-            if (e.CommandName == "S")
-            {
-                try
-                {
-                    int userId = Convert.ToInt32(e.CommandArgument.ToString());
-                    DataTable dtUser = BusinessLayer.User.UserGetAll(new Entity.User { UserId = userId });
-                    int existingStatus = 0;
-                    if (dtUser != null && dtUser.Rows.Count > 0)
-                    {
-                        existingStatus = Convert.ToInt32(dtUser.Rows[0]["Status"].ToString());
-                    }
+        //protected void gvUser_RowCommand(object sender, GridViewCommandEventArgs e)
+        //{
+        //    if (e.CommandName == "S")
+        //    {
+        //        try
+        //        {
+        //            int userId = Convert.ToInt32(e.CommandArgument.ToString());
+        //            DataTable dtUser = BusinessLayer.User.UserGetAll(new Entity.User { UserId = userId });
+        //            int existingStatus = 0;
+        //            if (dtUser != null && dtUser.Rows.Count > 0)
+        //            {
+        //                existingStatus = Convert.ToInt32(dtUser.Rows[0]["Status"].ToString());
+        //            }
 
-                    if (existingStatus == 1)
-                        existingStatus = 0;
-                    else if (existingStatus == 0)
-                        existingStatus = 1;
+        //            if (existingStatus == 1)
+        //                existingStatus = 0;
+        //            else if (existingStatus == 0)
+        //                existingStatus = 1;
 
-                    int retValue = BusinessLayer.User.UserStatusChange(userId, existingStatus, Convert.ToInt32(HttpContext.Current.User.Identity.Name));
-                    if (retValue > 0)
-                    {
-                        User_GetAll();
-                        UserMessage.Text = "Status changed.";
-                        UserMessage.Css = BusinessLayer.MessageCssClass.Success;
-                    }
-                    else
-                    {
-                        UserMessage.Text = "Cannot change status.";
-                        UserMessage.Css = BusinessLayer.MessageCssClass.Error;
-                    }
-                }
-                catch (CustomException ex)
-                {
-                    UserMessage.Text = "Cannot change status. " + ex.Log(Request.Url.AbsoluteUri, Convert.ToInt32(HttpContext.Current.User.Identity.Name));
-                    UserMessage.Css = BusinessLayer.MessageCssClass.Error;
-                }
-            }
-            if (e.CommandName == "UG")
-            {
+        //            int retValue = BusinessLayer.User.UserStatusChange(userId, existingStatus, Convert.ToInt32(HttpContext.Current.User.Identity.Name));
+        //            if (retValue > 0)
+        //            {
+        //                User_GetAll();
+        //                UserMessage.Text = "Status changed.";
+        //                UserMessage.Css = BusinessLayer.MessageCssClass.Success;
+        //            }
+        //            else
+        //            {
+        //                UserMessage.Text = "Cannot change status.";
+        //                UserMessage.Css = BusinessLayer.MessageCssClass.Error;
+        //            }
+        //        }
+        //        catch (CustomException ex)
+        //        {
+        //            UserMessage.Text = "Cannot change status. " + ex.Log(Request.Url.AbsoluteUri, Convert.ToInt32(HttpContext.Current.User.Identity.Name));
+        //            UserMessage.Css = BusinessLayer.MessageCssClass.Error;
+        //        }
+        //    }
+        //    if (e.CommandName == "UG")
+        //    {
 
-            }
-        }
+        //    }
+        //}
 
         protected void chklUserGroup_SelectedIndexChanged(object sender, EventArgs e)
         {

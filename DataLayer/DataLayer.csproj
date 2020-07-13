@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="DataManager.cs" />
+    <Compile Include="Designation.cs" />
     <Compile Include="ExceptionLog.cs" />
     <Compile Include="File.cs" />
     <Compile Include="FileCategory.cs" />

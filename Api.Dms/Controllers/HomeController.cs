@@ -12,7 +12,7 @@ namespace Api.Dms.Controllers
     public class HomeController : ApiController
     {
         [HttpGet]
-        //[JwtAuthorization(Entity.Utility.USER)]
+        [JwtAuthorization(Entity.Utility.USER)]
         public HttpResponseMessage Index()
         {
             return Request.CreateResponse(HttpStatusCode.OK, "Called index");

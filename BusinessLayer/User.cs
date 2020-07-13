@@ -10,24 +10,42 @@ namespace BusinessLayer
     {
         public User() { }
 
-        public static int UserSave(Entity.User user)
+        public int UserSave(Entity.User user)
         {
             return DataLayer.User.User_Save(user);
         }
 
-        public static DataTable UserGetAll(Entity.User user)
+        public List<Entity.User> UserGetAll(Entity.User user)
         {
-            return DataLayer.User.User_GetAll(user);
+            List<Entity.User> users = DataLayer.User.User_GetAll(user);
+            foreach (Entity.User u in users)
+            {
+                foreach (Entity.UserGroup userGroup in new UserGroup().UserGroup_GetByUserId(u.UserId))
+                    u.SelectedUserGroups.Add(userGroup.UserGroupId);
+                foreach (int roleId in new User().UserRole_GetByUserId(u.UserId))
+                    u.SelectedUserRoles.Add(roleId);
+            }
+            return users;
         }
 
-        public static int UserStatusChange(int userId, int status, int modifiedBy)
+        public int UserStatusChange(int userId, int status, int modifiedBy)
         {
             return DataLayer.User.User_StatusChange(userId, status, modifiedBy);
         }
 
-        public static int UserRole_Save(int userId, int roleId, bool isEnable)
+        public int UserRole_Save(int userId, int roleId, bool isEnable)
         {
             return DataLayer.User.UserRole_Save(userId, roleId, isEnable);
+        }
+
+        public int User_LoginStatusChange(int userId, int loginStatus, int modifiedBy)
+        {
+            return DataLayer.User.User_LoginStatusChange(userId, loginStatus, modifiedBy);
+        }
+
+        public List<int> UserRole_GetByUserId(int userId)
+        {
+            return DataLayer.User.UserRole_GetByUserId(userId);
         }
 
         ~User()

@@ -11,22 +11,22 @@ namespace BusinessLayer
         public UserGroup()
         { }
 
-        public static int UserGroupSave(Entity.UserGroup UserGroup)
+        public int UserGroupSave(Entity.UserGroup UserGroup)
         {
             return DataLayer.UserGroup.UserGroup_Save(UserGroup);
         }
 
-        public static DataTable UserGroupGetAll(Entity.UserGroup UserGroup)
+        public List<Entity.UserGroup> UserGroupGetAll(Entity.UserGroup UserGroup)
         {
             return DataLayer.UserGroup.UserGroup_GetAll(UserGroup);
         }
 
-        public static int UserGroupDelete(int UserGroupId)
+        public int UserGroupDelete(int UserGroupId)
         {
             return DataLayer.UserGroup.UserGroup_Delete(UserGroupId);
         }
 
-        public static int UserGroupUserMapping_Save(Entity.UserGroup userGroup)
+        public int UserGroupUserMapping_Save(Entity.UserGroup userGroup)
         {
             return DataLayer.UserGroup.UserGroupUserMapping_Save(userGroup);
         }
@@ -34,6 +34,11 @@ namespace BusinessLayer
         public static int UserGroupFileMapping_Save(Entity.UserGroup userGroup)
         {
             return DataLayer.UserGroup.UserGroupFileMapping_Save(userGroup);
+        }
+
+        public List<Entity.UserGroup> UserGroup_GetByUserId(int userId)
+        {
+            return DataLayer.UserGroup.UserGroup_GetByUserId(userId);
         }
 
         ~UserGroup()

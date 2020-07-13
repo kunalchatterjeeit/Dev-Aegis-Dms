@@ -12,17 +12,17 @@ namespace BusinessLayer
         public FileMetadata()
         { }
 
-        public static int MetadataSave(Entity.Metadata metadata)
+        public int MetadataSave(Entity.Metadata metadata)
         {
             return DataLayer.Metadata.Metadata_Save(metadata);
         }
 
-        public static DataTable MetadataGetAll(Entity.Metadata metadata)
+        public List<Entity.Metadata> MetadataGetAll(Entity.Metadata metadata)
         {
             return DataLayer.Metadata.Metadata_GetAll(metadata);
         }
 
-        public static int MetadataDelete(Int64 metadataId)
+        public int MetadataDelete(long metadataId)
         {
             return DataLayer.Metadata.Metadata_Delete(metadataId);
         }

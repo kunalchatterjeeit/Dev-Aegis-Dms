@@ -25,8 +25,9 @@ namespace DataLayer
             }
         }
 
-        public static DataTable UserGroup_GetAll(Entity.UserGroup UserGroup)
+        public static List<Entity.UserGroup> UserGroup_GetAll(Entity.UserGroup UserGroup)
         {
+            List<Entity.UserGroup> userGroups = new List<Entity.UserGroup>();
             using (DataManager oDm = new DataManager())
             {
                 if (UserGroup.UserGroupId == 0)
@@ -38,7 +39,22 @@ namespace DataLayer
                     oDm.Add("p_UserGroupId", MySqlDbType.Int32, UserGroup.UserGroupId);
                 }
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_UserGroup_GetAll");
+                using (MySqlDataReader reader = oDm.ExecuteReader("usp_UserGroup_GetAll"))
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            userGroups.Add(new Entity.UserGroup()
+                            {
+                                UserGroupId = Convert.ToInt32(reader["UserGroupId"].ToString()),
+                                Name = reader["Name"].ToString(),
+                                Note = reader["Note"].ToString()
+                            });
+                        }
+                    }
+                }
+                return userGroups;
             }
         }
 
@@ -82,6 +98,31 @@ namespace DataLayer
 
                 oDm.CommandType = CommandType.StoredProcedure;
                 return oDm.ExecuteNonQuery("usp_UserGroupFileMapping_Save");
+            }
+        }
+
+        public static List<Entity.UserGroup> UserGroup_GetByUserId(int userId)
+        {
+            List<Entity.UserGroup> userGroups = new List<Entity.UserGroup>();
+            using (DataManager oDm = new DataManager())
+            {
+                oDm.Add("p_UserId", MySqlDbType.Int32, userId);
+                oDm.CommandType = CommandType.StoredProcedure;
+                using (MySqlDataReader reader = oDm.ExecuteReader("usp_UserGroup_GetByUserId"))
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            userGroups.Add(new Entity.UserGroup()
+                            {
+                                UserGroupUserMappingId = Convert.ToInt64(reader["UserGroupUserMappingId"].ToString()),
+                                UserGroupId = Convert.ToInt32(reader["UserGroupId"].ToString())
+                            });
+                        }
+                    }
+                }
+                return userGroups;
             }
         }
     }

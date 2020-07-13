@@ -12,6 +12,7 @@
         public string Password { get; set; }
         public object Token { get; set; }
         public string Message { get; set; }
+        public string[] Roles { get; set; }
     }
 
     public enum LoginStatus
