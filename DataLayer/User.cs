@@ -28,6 +28,7 @@ namespace DataLayer
 
                 oDm.CommandType = CommandType.StoredProcedure;
                 retValue = oDm.ExecuteNonQuery("usp_User_Save");
+                oDm.Dispose();
                 return retValue;
             }
         }
@@ -52,6 +53,9 @@ namespace DataLayer
                 else
                     oDm.Add("p_UserId", MySqlDbType.Int32, user.UserId);
 
+                oDm.Add("p_UserId", MySqlDbType.Int32, user.UserId);
+                oDm.Add("p_UserId", MySqlDbType.Int32, user.UserId);
+
                 oDm.CommandType = CommandType.StoredProcedure;
                 using (MySqlDataReader reader = oDm.ExecuteReader("usp_User_GetAll"))
                 {
@@ -72,6 +76,7 @@ namespace DataLayer
                                 CreatedDate = Convert.ToDateTime(reader["CreatedDate"].ToString()),
                             });
                         }
+                        oDm.Dispose();
                     }
                 }
             }
@@ -87,7 +92,9 @@ namespace DataLayer
                 oDm.Add("p_ModifiedBy", MySqlDbType.Int32, modifiedBy);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_User_StatusChange");
+                int retValue = oDm.ExecuteNonQuery("usp_User_StatusChange");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -102,6 +109,7 @@ namespace DataLayer
 
                 oDm.CommandType = CommandType.StoredProcedure;
                 retValue = oDm.ExecuteNonQuery("usp_UserRole_Save");
+                oDm.Dispose();
                 return retValue;
             }
         }
@@ -115,7 +123,9 @@ namespace DataLayer
                 oDm.Add("p_ModifiedBy", MySqlDbType.Int32, modifiedBy);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_User_LoginStatusChange");
+                int retValue = oDm.ExecuteNonQuery("usp_User_LoginStatusChange");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -134,6 +144,7 @@ namespace DataLayer
                         {
                             userRoles.Add(Convert.ToInt32(reader["RoleId"].ToString()));
                         }
+                        oDm.Dispose();
                     }
                 }
                 return userRoles;

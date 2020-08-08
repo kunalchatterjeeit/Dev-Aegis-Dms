@@ -24,7 +24,9 @@ namespace DataLayer
                 oDm.Add("p_CreatedBy", MySqlDbType.Int32, metadataFileMapping.CreatedBy);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_MetadataFileMapping_Save");
+                int retValue = oDm.ExecuteNonQuery("usp_MetadataFileMapping_Save");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -33,18 +35,35 @@ namespace DataLayer
             using (DataManager oDm = new DataManager())
             {
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_MetadataFileMapping_GetAll");
+                DataTable retValue = oDm.ExecuteDataTable("usp_MetadataFileMapping_GetAll");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
-        public static DataTable MetadataFileMapping_ByMetadataId(Int64 metadataId)
+        public static List<Entity.MetadataSearch> MetadataFileMapping_ByMetadataId(long metadataId)
         {
+            List<Entity.MetadataSearch> metadataSearches = new List<Entity.MetadataSearch>();
             using (DataManager oDm = new DataManager())
             {
                 oDm.Add("p_MetadataId", MySqlDbType.Int64, metadataId);
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_MetadataFileMapping_ByMetadataId");
+                using (MySqlDataReader reader = oDm.ExecuteReader("usp_MetadataFileMapping_ByMetadataId"))
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            metadataSearches.Add(new Entity.MetadataSearch()
+                            {
+                                MetadataContent = reader["MetaDataContent"].ToString()
+                            });
+                        }
+                        oDm.Dispose();
+                    }
+                }
             }
+            return metadataSearches;
         }
     }
 }

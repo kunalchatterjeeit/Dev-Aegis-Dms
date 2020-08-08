@@ -29,6 +29,7 @@ namespace DataLayer
                                 Description = reader["Description"].ToString()
                             });
                         }
+                        oDm.Dispose();
                     }
                 }
             }

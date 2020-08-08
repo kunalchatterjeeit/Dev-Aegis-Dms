@@ -10,10 +10,11 @@ namespace Entity
     {
         public Metadata() { }
 
-        public Int64 MetadataId { get; set; }
+        public long MetadataId { get; set; }
         public string Name { get; set; }
         public int FileCategoryId { get; set; }
         public int FileTypeId { get; set; }
         public string Note { get; set; }
+        public string MetadataValue { get; set; }
     }
 }

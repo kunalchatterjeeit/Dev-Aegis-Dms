@@ -23,7 +23,9 @@ namespace DataLayer
                 oDm.Add("p_Note", MySqlDbType.VarChar, metadata.Note);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_Metadata_Save");
+                int retValue = oDm.ExecuteNonQuery("usp_Metadata_Save");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -68,6 +70,7 @@ namespace DataLayer
                                 Note = reader["Note"].ToString()
                             });
                         }
+                        oDm.Dispose();
                     }
                 }
                 return metadatas;
@@ -81,7 +84,9 @@ namespace DataLayer
                 oDm.Add("p_MetadataId", MySqlDbType.Int64, metadataId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_Metadata_Delete");
+                int retValue = oDm.ExecuteNonQuery("usp_Metadata_Delete");
+                oDm.Dispose();
+                return retValue;
             }
         }
     }

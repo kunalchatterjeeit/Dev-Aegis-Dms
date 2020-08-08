@@ -41,7 +41,7 @@ namespace BusinessLayer
                     io.File.Delete(decryptOriginalFileNameWithPath);
                 }
 
-                BusinessLayer.File.File_Content_Save(fileGuid, innertext); //Saving
+                new BusinessLayer.File().File_Content_Save(fileGuid, innertext); //Saving
             }
             catch (CustomException ex)
             {

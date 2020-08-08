@@ -21,7 +21,7 @@ namespace DataLayer
 
                 oDm.CommandType = CommandType.StoredProcedure;
                 int retVal = oDm.ExecuteNonQuery("usp_FileContent_Save");
-
+                oDm.Dispose();
                 return retVal;
             }
         }

@@ -37,14 +37,14 @@ namespace Api.Dms.Controllers
                         }
                         else
                         {
-                            response.ResponseCode = 1;
+                            response.ResponseCode = (int)ResponseCode.Failed;
                             response.Message = "Invalid Username/Password";
                             responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
                         }
                     }
                     else
                     {
-                        response.ResponseCode = 1;
+                        response.ResponseCode = (int)ResponseCode.Failed;
                         response.Message = "Invalid Username/Password";
                         responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
                     }
@@ -52,8 +52,8 @@ namespace Api.Dms.Controllers
             }
             catch (Exception ex)
             {
-                response.ResponseCode = 1;
                 response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
             return responseMessage;

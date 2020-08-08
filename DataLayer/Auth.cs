@@ -16,7 +16,9 @@ namespace DataLayer
             {
                 oDm.Add("p_UserName", MySqlDbType.VarChar, userName);
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_Login");
+                DataTable retValue = oDm.ExecuteDataTable("usp_Login");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -32,7 +34,9 @@ namespace DataLayer
                 oDm.Add("p_FailedPassword", MySqlDbType.VarChar, auth.FailedPassword);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_Login_Save");
+                int retValue = oDm.ExecuteNonQuery("usp_Login_Save");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -48,6 +52,8 @@ namespace DataLayer
 
                 foreach (DataRow drPermission in dtPermission.Rows)
                     retValue += drPermission["PermissionId"].ToString() + ",";
+
+                oDm.Dispose();
             }
 
             return retValue;

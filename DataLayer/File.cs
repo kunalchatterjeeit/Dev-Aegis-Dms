@@ -2,9 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.IO;
 
 namespace DataLayer
 {
@@ -29,10 +27,11 @@ namespace DataLayer
                 oDm.Add("p_CreatedDate", MySqlDbType.DateTime, file.CreatedDate);
                 oDm.Add("p_CreatedBy", MySqlDbType.Int32, file.CreatedBy);
                 oDm.Add("p_FileStatus", MySqlDbType.Int32, file.FileStatus);
+                oDm.Add("p_SizeInKb", MySqlDbType.Decimal, file.SizeInKb);
 
                 oDm.CommandType = CommandType.StoredProcedure;
                 int retVal = oDm.ExecuteNonQuery("usp_File_Save");
-
+                oDm.Dispose();
                 if (retVal > 0)
                 {
                     return fileGuid;
@@ -63,7 +62,7 @@ namespace DataLayer
 
                 oDm.CommandType = CommandType.StoredProcedure;
                 int retVal = oDm.ExecuteNonQuery("usp_File_Update");
-
+                oDm.Dispose();
                 if (retVal > 0)
                 {
                     return fileGuid;
@@ -80,7 +79,9 @@ namespace DataLayer
             using (DataManager oDm = new DataManager())
             {
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_File_GetAll");
+                DataTable retValue = oDm.ExecuteDataTable("usp_File_GetAll");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -89,7 +90,9 @@ namespace DataLayer
             using (DataManager oDm = new DataManager())
             {
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_GetPendingContentTransferFiles");
+                DataTable retValue = oDm.ExecuteDataTable("usp_GetPendingContentTransferFiles");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -101,43 +104,114 @@ namespace DataLayer
                 oDm.Add("p_Content", MySqlDbType.LongText, content);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_File_Content_Save");
+                int retValue = oDm.ExecuteNonQuery("usp_File_Content_Save");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
-        public static DataTable File_SearchByMetadata(string condition, int userId)
+        public static List<Entity.SearchResult> File_SearchByMetadata(string condition, int userId)
         {
+            List<Entity.SearchResult> files = new List<Entity.SearchResult>();
             using (DataManager oDm = new DataManager())
             {
                 oDm.Add("p_Condition", MySqlDbType.VarChar, condition);
                 oDm.Add("p_UserId", MySqlDbType.Int32, userId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_File_SearchByMetadata");
+                using (MySqlDataReader reader = oDm.ExecuteReader("usp_File_SearchByMetadata"))
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            DateTime entryDate = new DateTime();
+                            files.Add(new Entity.SearchResult()
+                            {
+                                FileGuid = Guid.Parse(reader["FileGuid"].ToString()),
+                                FileCategoryName = reader["FileCategory"].ToString(),
+                                FileTypeName = reader["FileType"].ToString(),
+                                FileName = reader["FileName"].ToString(),
+                                EntryDate = DateTime.TryParse(reader["EntryDate"].ToString(), out entryDate) ? entryDate.ToString("dd/MM/yyyy") : string.Empty,
+                                FileExtension = Path.GetExtension(reader["FileName"].ToString())
+                            });
+                        }
+                        oDm.Dispose();
+                    }
+                }
             }
+            return files;
         }
 
-        public static DataTable File_SearchByPhrase(string phrase, int userId)
+        public static List<Entity.SearchResult> File_SearchByPhrase(string phrase, int userId)
         {
+            List<Entity.SearchResult> files = new List<Entity.SearchResult>();
             using (DataManager oDm = new DataManager())
             {
                 oDm.Add("p_phrase", MySqlDbType.VarChar, phrase);
                 oDm.Add("p_UserId", MySqlDbType.Int32, userId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_File_SearchByPhrase");
+                using (MySqlDataReader reader = oDm.ExecuteReader("usp_File_SearchByPhrase"))
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            DateTime entryDate = new DateTime();
+                            files.Add(new Entity.SearchResult()
+                            {
+                                FileGuid = Guid.Parse(reader["FileGuid"].ToString()),
+                                FileCategoryName = reader["FileCategory"].ToString(),
+                                FileTypeName = reader["FileType"].ToString(),
+                                FileName = reader["FileName"].ToString(),
+                                EntryDate = DateTime.TryParse(reader["EntryDate"].ToString(), out entryDate) ? entryDate.ToString("dd/MM/yyyy") : string.Empty,
+                                FileExtension = Path.GetExtension(reader["FileName"].ToString())
+                            });
+                        }
+                        oDm.Dispose();
+                    }
+                }
             }
+            return files;
         }
 
-        public static DataTable File_GetByFileGuid(string fileGuid)
+        public static Entity.File File_GetByFileGuid(string fileGuid)
         {
+            Entity.File file = new Entity.File();
             using (DataManager oDm = new DataManager())
             {
                 oDm.Add("p_FileGuid", MySqlDbType.VarChar, fileGuid);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_File_GetByFileGuid");
+                using (MySqlDataReader reader = oDm.ExecuteReader("usp_File_GetByFileGuid"))
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            DateTime entryDate = new DateTime();
+
+                            file.FileGuid = Guid.Parse(reader["FileGuid"].ToString());
+                            file.FileTypeId = Convert.ToInt32(reader["FileTypeId"].ToString());
+                            file.PhysicalFileName = reader["PhysicalFileName"].ToString();
+                            file.FileOriginalName = reader["FileOriginalName"].ToString();
+                            file.EntryDate = DateTime.TryParse(reader["EntryDate"].ToString(), out entryDate) ? entryDate : DateTime.MinValue;
+                            file.FileExtension = Path.GetExtension(reader["FileExtension"].ToString());
+                            file.IsFullTextCopied = Convert.ToBoolean(reader["IsFullTextCopied"].ToString());
+                            file.IsAttachment = Convert.ToBoolean(reader["IsAttachment"].ToString());
+                            //file.MainFileGuid = new Guid(reader["MainFileGuid"].ToString());
+                            file.FileStatus = (int)Enum.Parse(typeof(Entity.FileStatus), reader["Status"].ToString());
+                            file.CreatedByName = reader["CreatedBy"].ToString();
+                            file.CreatedDate = DateTime.TryParse(reader["CreatedDate"].ToString(), out entryDate) ? entryDate : DateTime.MinValue;
+                            file.LastModifiedByName = Path.GetExtension(reader["LastModifiedBy"].ToString());
+                            file.ModifiedDate = DateTime.TryParse(reader["LastModifiedDate"].ToString(), out entryDate) ? entryDate : DateTime.MinValue;
+                        }
+                        oDm.Dispose();
+                    }
+                }
             }
+            return file;
         }
 
         public static int File_StatusChange(Guid fileGuid, int status)
@@ -148,7 +222,9 @@ namespace DataLayer
                 oDm.Add("p_Status", MySqlDbType.Int32, status);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_File_StatusChange");
+                int retValue = oDm.ExecuteNonQuery("usp_File_StatusChange");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -159,7 +235,9 @@ namespace DataLayer
                 oDm.Add("p_FileGuid", MySqlDbType.VarChar, fileGuid);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_File_Delete");
+                int retValue = oDm.ExecuteNonQuery("usp_File_Delete");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -170,7 +248,9 @@ namespace DataLayer
                 oDm.Add("p_FileGuid", MySqlDbType.VarChar, fileGuid);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_MetadataFileMapping_GetByFileGuid");
+                DataTable retValue = oDm.ExecuteDataTable("usp_MetadataFileMapping_GetByFileGuid");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -179,7 +259,9 @@ namespace DataLayer
             using (DataManager oDm = new DataManager())
             {
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteDataTable("usp_PdfSeperator_GetAll");
+                DataTable retValue = oDm.ExecuteDataTable("usp_PdfSeperator_GetAll");
+                oDm.Dispose();
+                return retValue;
             }
         }
     }

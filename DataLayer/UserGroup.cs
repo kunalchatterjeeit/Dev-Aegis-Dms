@@ -21,7 +21,9 @@ namespace DataLayer
                 oDm.Add("p_Note", MySqlDbType.VarChar, UserGroup.Note);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_UserGroup_Save");
+                int retValue = oDm.ExecuteNonQuery("usp_UserGroup_Save");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -52,6 +54,7 @@ namespace DataLayer
                                 Note = reader["Note"].ToString()
                             });
                         }
+                        oDm.Dispose();
                     }
                 }
                 return userGroups;
@@ -65,7 +68,9 @@ namespace DataLayer
                 oDm.Add("p_UserGroupId", MySqlDbType.Int32, UserGroupId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_UserGroup_Delete");
+                int retValue = oDm.ExecuteNonQuery("usp_UserGroup_Delete");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -81,7 +86,9 @@ namespace DataLayer
                 oDm.Add("p_Status", MySqlDbType.Int32, userGroup.Status);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_UserGroupUserMapping_Save");
+                int retValue = oDm.ExecuteNonQuery("usp_UserGroupUserMapping_Save");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -97,7 +104,9 @@ namespace DataLayer
                 oDm.Add("p_Status", MySqlDbType.Int32, userGroup.Status);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_UserGroupFileMapping_Save");
+                int retValue = oDm.ExecuteNonQuery("usp_UserGroupFileMapping_Save");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -120,6 +129,7 @@ namespace DataLayer
                                 UserGroupId = Convert.ToInt32(reader["UserGroupId"].ToString())
                             });
                         }
+                        oDm.Dispose();
                     }
                 }
                 return userGroups;

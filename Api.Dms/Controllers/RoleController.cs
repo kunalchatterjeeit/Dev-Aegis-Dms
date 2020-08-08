@@ -8,42 +8,20 @@ using System.Web.Http;
 
 namespace Api.Dms.Controllers
 {
-    public class MetadataController : ApiController
+    public class RoleController : ApiController
     {
-        [HttpGet]
-        [JwtAuthorization(Entity.Utility.METADATA)]
-        public HttpResponseMessage MetadataGetAll()
-        {
-            Entity.HttpResponse response = new Entity.HttpResponse();
-            HttpResponseMessage responseMessage = new HttpResponseMessage();
-            try
-            {
-                List<Entity.Metadata> FileMetadatas = new BusinessLayer.FileMetadata().MetadataGetAll(new Entity.Metadata() { });
-                response.ResponseData = FileMetadatas;
-                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
-                response.ResponseCode = (int)ResponseCode.CriticalCode;
-                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-            return responseMessage;
-        }
 
         [HttpGet]
-        [JwtAuthorization(Entity.Utility.METADATA)]
-        public HttpResponseMessage MetadataGetByFileTypeId(int id)
+        [JwtAuthorization(Entity.Utility.ROLEPERMISSION)]
+        public HttpResponseMessage RoleGetAll()
         {
             Entity.HttpResponse response = new Entity.HttpResponse();
             HttpResponseMessage responseMessage = new HttpResponseMessage();
             try
             {
-                List<Entity.Metadata> FileMetadatas = new BusinessLayer.FileMetadata().MetadataGetAll(new Entity.Metadata()
-                {
-                    FileTypeId = id
-                });
-                response.ResponseData = FileMetadatas;
+                int roleId = 0;
+                List<Entity.Role> roles = new BusinessLayer.Role().RoleGetAll(roleId);
+                response.ResponseData = roles;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
             catch (Exception ex)
@@ -56,8 +34,8 @@ namespace Api.Dms.Controllers
         }
 
         [HttpPost]
-        [JwtAuthorization(Entity.Utility.METADATA)]
-        public HttpResponseMessage MetadataCreate(Entity.Metadata model)
+        [JwtAuthorization(Entity.Utility.USERROLE)]
+        public HttpResponseMessage UserRoleCreate(Entity.Role model)
         {
             Entity.HttpResponse response = new Entity.HttpResponse();
             HttpResponseMessage responseMessage = new HttpResponseMessage();
@@ -65,11 +43,11 @@ namespace Api.Dms.Controllers
             {
                 if (ModelState.IsValid && model != null)
                 {
-                    int retValue = new BusinessLayer.FileMetadata().MetadataSave(model);
-                    if (model.MetadataId == 0)
-                        response.Message = "Metadata created.";
+                    int retValue = new BusinessLayer.Role().RoleSave(model);
+                    if (model.RoleId == 0)
+                        response.Message = "User role created.";
                     else
-                        response.Message = "Metadata updated.";
+                        response.Message = "User role updated.";
                     response.ResponseCode = (int)ResponseCode.Success;
                     responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
                 }
@@ -84,17 +62,14 @@ namespace Api.Dms.Controllers
         }
 
         [HttpGet]
-        [JwtAuthorization(Entity.Utility.METADATA)]
-        public HttpResponseMessage MetadataGetById(int id)
+        [JwtAuthorization(Entity.Utility.USERROLE)]
+        public HttpResponseMessage RoleGetById(int id)
         {
             Entity.HttpResponse response = new Entity.HttpResponse();
             HttpResponseMessage responseMessage = new HttpResponseMessage();
             try
             {
-                List<Entity.Metadata> roles = new BusinessLayer.FileMetadata().MetadataGetAll(new Entity.Metadata()
-                {
-                    MetadataId = id
-                });
+                List<Entity.Role> roles = new BusinessLayer.Role().RoleGetAll(id);
                 response.ResponseData = roles;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
@@ -108,16 +83,16 @@ namespace Api.Dms.Controllers
         }
 
         [HttpPost]
-        [JwtAuthorization(Entity.Utility.METADATA)]
-        public HttpResponseMessage MetadataDelete(int id)
+        [JwtAuthorization(Entity.Utility.USERROLE)]
+        public HttpResponseMessage RoleDelete(int id)
         {
             Entity.HttpResponse response = new Entity.HttpResponse();
             HttpResponseMessage responseMessage = new HttpResponseMessage();
             try
             {
-                int retValue = new BusinessLayer.FileMetadata().MetadataDelete(id);
+                int retValue = new BusinessLayer.Role().RoleDelete(id);
                 if (retValue > 0)
-                    response.Message = "Metadata deleted.";
+                    response.Message = "User role deleted.";
                 response.ResponseCode = (int)ResponseCode.Success;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
@@ -130,20 +105,40 @@ namespace Api.Dms.Controllers
             return responseMessage;
         }
 
-        [HttpPost]
-        [JwtAuthorization(Entity.Utility.METADATA)]
-        public HttpResponseMessage MetadataContentGetByMetadataId(Entity.MetadataSearch model)
+        [HttpGet]
+        [JwtAuthorization(Entity.Utility.ROLEPERMISSION)]
+        public HttpResponseMessage RolePermissionGetByRoleId(int id)
         {
-            List<string> result = new List<string>();
+            Entity.HttpResponse response = new Entity.HttpResponse();
+            HttpResponseMessage responseMessage = new HttpResponseMessage();
+            try
+            {
+                List<Entity.RolePermission> rolePermissions = new BusinessLayer.Role().RolePermissionGetByRoleId(id);
+                response.ResponseData = rolePermissions;
+                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
+                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            return responseMessage;
+        }
+
+        [HttpPost]
+        [JwtAuthorization(Entity.Utility.ROLEPERMISSION)]
+        public HttpResponseMessage RolePermissionSave(Entity.RolePermission model)
+        {
             Entity.HttpResponse response = new Entity.HttpResponse();
             HttpResponseMessage responseMessage = new HttpResponseMessage();
             try
             {
                 if (ModelState.IsValid && model != null)
                 {
-                    List<Entity.MetadataSearch> metadataSearches = BusinessLayer.MetadataFileMapping.MetadataFileMappingByMetadataId(model.MetadataId);
-                    metadataSearches = metadataSearches.Where(p => p.MetadataContent.Contains(model.MetadataContent)).ToList();
-                    response.ResponseData = metadataSearches;
+                    int retValue = new BusinessLayer.Role().RolePermissionSave(model.RoleId, model.PermissionId, model.IsEnabled);
+
+                    response.Message = "Role permission updated.";
                     response.ResponseCode = (int)ResponseCode.Success;
                     responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
                 }

@@ -25,6 +25,7 @@ namespace DataLayer
                 oDm.CommandType = CommandType.StoredProcedure;
                 oDm.ExecuteNonQuery("usp_ErrorLog_Save");
                 int.TryParse(errorLog.Value.ToString(),out errorLogId);
+                oDm.Dispose();
                 return errorLogId;
             }
         }

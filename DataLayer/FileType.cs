@@ -21,7 +21,9 @@ namespace DataLayer
                 oDm.Add("p_Note", MySqlDbType.VarChar, fileType.Note);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_FileType_Save");
+                int retValue = oDm.ExecuteNonQuery("usp_FileType_Save");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -60,6 +62,7 @@ namespace DataLayer
                                 Note = reader["Note"].ToString()
                             });
                         }
+                        oDm.Dispose();
                     }
                 }
                 return fileTypes;
@@ -73,7 +76,9 @@ namespace DataLayer
                 oDm.Add("p_FileTypeId", MySqlDbType.VarChar, fileTypeId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_FileType_Delete");
+                int retValue = oDm.ExecuteNonQuery("usp_FileType_Delete");
+                oDm.Dispose();
+                return retValue;
             }
         }
     }

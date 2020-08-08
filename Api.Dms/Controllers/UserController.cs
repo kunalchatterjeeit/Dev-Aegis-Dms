@@ -11,6 +11,7 @@ namespace Api.Dms.Controllers
     public class UserController : ApiController
     {
         [HttpGet]
+        [JwtAuthorization(Entity.Utility.USER)]
         public HttpResponseMessage DesignationGetAll()
         {
             Entity.HttpResponse response = new Entity.HttpResponse();
@@ -24,6 +25,7 @@ namespace Api.Dms.Controllers
             catch (Exception ex)
             {
                 response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
             return responseMessage;
@@ -47,6 +49,7 @@ namespace Api.Dms.Controllers
             catch (Exception ex)
             {
                 response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
             return responseMessage;
@@ -95,6 +98,7 @@ namespace Api.Dms.Controllers
             catch (Exception ex)
             {
                 response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
             return responseMessage;
@@ -119,6 +123,7 @@ namespace Api.Dms.Controllers
             catch (Exception ex)
             {
                 response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
             return responseMessage;
@@ -143,12 +148,14 @@ namespace Api.Dms.Controllers
             catch (Exception ex)
             {
                 response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
             return responseMessage;
         }
 
         [HttpGet]
+        [JwtAuthorization(Entity.Utility.USERGROUP)]
         public HttpResponseMessage UserGroupGetAll()
         {
             Entity.HttpResponse response = new Entity.HttpResponse();
@@ -162,13 +169,14 @@ namespace Api.Dms.Controllers
             catch (Exception ex)
             {
                 response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
             return responseMessage;
         }
 
         [HttpPost]
-        [JwtAuthorization(Entity.Utility.USER)]
+        [JwtAuthorization(Entity.Utility.USERGROUP)]
         public HttpResponseMessage UserGroupCreate(Entity.UserGroup model)
         {
             Entity.HttpResponse response = new Entity.HttpResponse();
@@ -189,12 +197,14 @@ namespace Api.Dms.Controllers
             catch (Exception ex)
             {
                 response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
             return responseMessage;
         }
 
         [HttpGet]
+        [JwtAuthorization(Entity.Utility.USERGROUP)]
         public HttpResponseMessage UserGroupGetById(int id)
         {
             Entity.HttpResponse response = new Entity.HttpResponse();
@@ -211,13 +221,14 @@ namespace Api.Dms.Controllers
             catch (Exception ex)
             {
                 response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
             return responseMessage;
         }
 
         [HttpPost]
-        [JwtAuthorization(Entity.Utility.USER)]
+        [JwtAuthorization(Entity.Utility.USERGROUP)]
         public HttpResponseMessage UserGroupDelete(int id)
         {
             Entity.HttpResponse response = new Entity.HttpResponse();
@@ -233,116 +244,11 @@ namespace Api.Dms.Controllers
             catch (Exception ex)
             {
                 response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
             return responseMessage;
         }
 
-        [HttpGet]
-        public HttpResponseMessage RoleGetAll()
-        {
-            Entity.HttpResponse response = new Entity.HttpResponse();
-            HttpResponseMessage responseMessage = new HttpResponseMessage();
-            try
-            {
-                int roleId = 0;
-                List<Entity.Role> roles = new BusinessLayer.Role().RoleGetAll(roleId);
-                response.ResponseData = roles;
-                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
-                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-            return responseMessage;
-        }
-
-        [HttpPost]
-        [JwtAuthorization(Entity.Utility.USER)]
-        public HttpResponseMessage UserRoleCreate(Entity.Role model)
-        {
-            Entity.HttpResponse response = new Entity.HttpResponse();
-            HttpResponseMessage responseMessage = new HttpResponseMessage();
-            try
-            {
-                if (ModelState.IsValid && model != null)
-                {
-                    int retValue = new BusinessLayer.Role().RoleSave(model);
-                    if (model.RoleId == 0)
-                        response.Message = "User role created.";
-                    else
-                        response.Message = "User role updated.";
-                    response.ResponseCode = (int)ResponseCode.Success;
-                    responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
-                }
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
-                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-            return responseMessage;
-        }
-
-        [HttpGet]
-        public HttpResponseMessage RoleGetById(int id)
-        {
-            Entity.HttpResponse response = new Entity.HttpResponse();
-            HttpResponseMessage responseMessage = new HttpResponseMessage();
-            try
-            {
-                List<Entity.Role> roles = new BusinessLayer.Role().RoleGetAll(id);
-                response.ResponseData = roles;
-                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
-                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-            return responseMessage;
-        }
-
-        [HttpPost]
-        [JwtAuthorization(Entity.Utility.USER)]
-        public HttpResponseMessage RoleDelete(int id)
-        {
-            Entity.HttpResponse response = new Entity.HttpResponse();
-            HttpResponseMessage responseMessage = new HttpResponseMessage();
-            try
-            {
-                int retValue = new BusinessLayer.Role().RoleDelete(id);
-                if (retValue > 0)
-                    response.Message = "User role deleted.";
-                response.ResponseCode = (int)ResponseCode.Success;
-                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
-                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-            return responseMessage;
-        }
-
-        [HttpGet]
-        public HttpResponseMessage RolePermissionGetByRoleId(int id)
-        {
-            Entity.HttpResponse response = new Entity.HttpResponse();
-            HttpResponseMessage responseMessage = new HttpResponseMessage();
-            try
-            {
-                List<Entity.RolePermission> rolePermissions = new BusinessLayer.Role().RolePermissionGetByRoleId(id);
-                response.ResponseData = rolePermissions;
-                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-            catch (Exception ex)
-            {
-                response.Message = ex.Message;
-                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
-            }
-            return responseMessage;
-        }
     }
 }

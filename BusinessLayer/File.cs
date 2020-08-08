@@ -11,64 +11,109 @@ namespace BusinessLayer
     {
         public File() { }
 
-        public static Guid? FileSave(Entity.File file)
+        public Guid? FileSave(Entity.File file)
         {
             return DataLayer.File.File_Save(file);
         }
 
-        public static Guid FileUpdate(Entity.File file)
+        public Guid FileUpdate(Entity.File file)
         {
             return DataLayer.File.File_Update(file);
         }
 
-        public static DataTable FileGetAll(Entity.File file)
+        public DataTable FileGetAll(Entity.File file)
         {
             return DataLayer.File.File_GetAll(file);
         }
 
-        public static DataTable GetPendingContentTransferFiles()
+        public DataTable GetPendingContentTransferFiles()
         {
             return DataLayer.File.GetPendingContentTransferFiles();
         }
 
-        public static int File_Content_Save(Guid fileGuid, string content)
+        public int File_Content_Save(Guid fileGuid, string content)
         {
             return DataLayer.File.File_Content_Save(fileGuid, content);
         }
 
-        public static DataTable FileSearchByMetadata(string condition, int userId)
+        public List<Entity.SearchResult> FileSearchByMetadata(string condition, int userId)
         {
             return DataLayer.File.File_SearchByMetadata(condition, userId);
         }
 
-        public static DataTable FileSearchByPhrase(string phrase, int userId)
+        public List<Entity.SearchResult> FileSearchByPhrase(string phrase, int userId)
         {
             return DataLayer.File.File_SearchByPhrase(phrase, userId);
         }
 
-        public static DataTable FileGetByFileGuid(string fileGuid)
+        public Entity.File FileGetByFileGuid(string fileGuid)
         {
             return DataLayer.File.File_GetByFileGuid(fileGuid);
         }
 
-        public static int FileStatusChange(Guid fileGuid, int status)
+        public int FileStatusChange(Guid fileGuid, int status)
         {
             return DataLayer.File.File_StatusChange(fileGuid, status);
         }
 
-        public static int FileDelete(Guid fileGuid)
+        public int FileDelete(Guid fileGuid)
         {
             return DataLayer.File.File_Delete(fileGuid);
         }
 
-        public static DataTable MetadataFileMappingGetByFileGuid(string fileGuid)
+        public DataTable MetadataFileMappingGetByFileGuid(string fileGuid)
         {
             return DataLayer.File.MetadataFileMapping_GetByFileGuid(fileGuid);
         }
 
-        public static DataTable PdfSeperatorGetAll()
+        public DataTable PdfSeperatorGetAll()
         {
             return DataLayer.File.PdfSeperator_GetAll();
+        }
+
+        public List<Entity.SearchResult> PrepareAdvanceSearch(List<Entity.Metadata> model, int userId)
+        {
+            List<Entity.SearchResult> searchResults = new List<Entity.SearchResult>();
+
+            string query = string.Empty;
+            string queryType = string.Empty;
+            int commonOccurance = 1;
+
+            if (model != null && model.Any())
+            {
+                foreach (Entity.Metadata drQuery in model)
+                {
+                    if (!(drQuery.Name.Equals("AND")) && !(drQuery.Name.Equals("OR")))
+                    {
+                        query += "(MetaDataId = " + drQuery.MetadataId;
+                    }
+
+                    if ((drQuery.Name.Equals("AND")) || (drQuery.Name.Equals("OR")))
+                    {
+                        if (string.IsNullOrEmpty(queryType))
+                        {
+                            queryType = drQuery.Name; //setting AND/OR to decide which query to call
+                        }
+
+                        query += " " + "OR" + " "; //OR for all query types //drQuery["MetadataName"].ToString()
+
+                        ++commonOccurance; //Used for AND type query
+                    }
+
+                    if (!string.IsNullOrEmpty(drQuery.MetadataValue) || !string.IsNullOrEmpty(drQuery.MetadataValue))
+                    {
+                        query += " AND MetaDataContent = '" + drQuery.MetadataValue.Trim() + "')";
+                    }
+                }
+
+                if (queryType == "AND" && commonOccurance > 0)
+                {
+                    query += " GROUP BY FileGuid HAVING COUNT(FileGuid) >= " + commonOccurance;
+                }
+
+                searchResults = new BusinessLayer.File().FileSearchByMetadata(query, userId);
+            }
+            return searchResults;
         }
 
         // Destructor

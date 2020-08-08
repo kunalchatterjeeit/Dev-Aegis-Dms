@@ -16,7 +16,9 @@ namespace DataLayer
                 oDm.Add("p_Note", MySqlDbType.VarChar, role.Note);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_Role_Save");
+                int retValue = oDm.ExecuteNonQuery("usp_Role_Save");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -40,6 +42,7 @@ namespace DataLayer
                                 Note = reader["Note"].ToString()
                             });
                         }
+                        oDm.Dispose();
                     }
                 }
                 return roles;
@@ -53,7 +56,9 @@ namespace DataLayer
                 oDm.Add("p_RoleId", MySqlDbType.VarChar, roleId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_Role_Delete");
+                int retValue = oDm.ExecuteNonQuery("usp_Role_Delete");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -66,7 +71,9 @@ namespace DataLayer
                 oDm.Add("p_IsEnabled", MySqlDbType.Bit, isEnabled);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_RolePermission_Save");
+                int retValue = oDm.ExecuteNonQuery("usp_RolePermission_Save");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -78,7 +85,7 @@ namespace DataLayer
                 oDm.Add("p_RoleId", MySqlDbType.Int32, roleId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                using (MySqlDataReader reader = oDm.ExecuteReader("usp_Role_GetAll"))
+                using (MySqlDataReader reader = oDm.ExecuteReader("usp_RolePermission_GetByRoleId"))
                 {
                     if (reader.HasRows)
                     {
@@ -86,12 +93,13 @@ namespace DataLayer
                         {
                             rolePermissions.Add(new Entity.RolePermission()
                             {
-                                RolePermissionId = Convert.ToInt32(reader["RolePermission"].ToString()),
+                                RolePermissionId = Convert.ToInt32(reader["RolePermissionId"].ToString()),
                                 RoleId = Convert.ToInt32(reader["RoleId"].ToString()),
                                 PermissionId = Convert.ToInt32(reader["PermissionId"].ToString()),
-                                IsEnabled = Convert.ToBoolean(reader["IsEnabled"].ToString())
+                                IsEnabled = (reader["IsEnable"].ToString() == "1") ? true : false
                             });
                         }
+                        oDm.Dispose();
                     }
                 }
             }

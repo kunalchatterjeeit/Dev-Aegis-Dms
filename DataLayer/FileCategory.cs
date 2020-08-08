@@ -21,7 +21,9 @@ namespace DataLayer
                 oDm.Add("p_Note", MySqlDbType.VarChar, fileCategory.Note);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_FileCategory_Save");
+                int retValue = oDm.ExecuteNonQuery("usp_FileCategory_Save");
+                oDm.Dispose();
+                return retValue;
             }
         }
 
@@ -45,6 +47,7 @@ namespace DataLayer
                                 Note = reader["Note"].ToString()
                             });
                         }
+                        oDm.Dispose();
                     }
                 }
                 return fileCategories;
@@ -58,7 +61,9 @@ namespace DataLayer
                 oDm.Add("p_FileCategoryId", MySqlDbType.VarChar, fileCategoryId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
-                return oDm.ExecuteNonQuery("usp_FileCategory_Delete");
+                int retValue = oDm.ExecuteNonQuery("usp_FileCategory_Delete");
+                oDm.Dispose();
+                return retValue;
             }
         }
     }
