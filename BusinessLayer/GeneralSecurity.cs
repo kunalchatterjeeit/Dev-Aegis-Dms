@@ -4,6 +4,7 @@ using System.Configuration;
 using System.Data;
 using System.IO;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -181,6 +182,29 @@ namespace BusinessLayer
             {
                 ex.Log("GeneralSecurity", 0);
             }
+        }
+
+        public static string GetMac()
+        {
+            NetworkInterface[] nics = NetworkInterface.GetAllNetworkInterfaces();
+            string sMacAddress = string.Empty;
+            foreach (NetworkInterface adapter in nics)
+            {
+                if (sMacAddress == string.Empty)// only return MAC Address from first card  
+                {
+                    IPInterfaceProperties properties = adapter.GetIPProperties();
+                    sMacAddress = adapter.GetPhysicalAddress().ToString();
+                }
+            }
+            return sMacAddress;
+        }
+
+        public static void ValidateMac()
+        {
+            List<string> localMacs = new List<string>() { "9EB6D0FADAEF", "9EB6F0FADAEF", "9EC6D0FADAEF" };
+
+            if (!localMacs.Where(m => m.Equals(GetMac())).Any())
+                throw new Exception("Unauthorized use detected. Contact Aegis Solutions.");
         }
     }
 }

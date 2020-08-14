@@ -20,7 +20,7 @@ namespace Api.Dms.Controllers
             try
             {
                 List<Entity.BarChartResponse> barChartResponses = new BusinessLayer.Chart().File_GetByDateRange(
-                    DateTime.Now.AddDays(-7).Date,
+                    DateTime.Now.AddDays(-70).Date,
                     DateTime.Now.Date,
                     Convert.ToInt32(HttpContext.Current.User.Identity.Name));
                 response.ResponseData = barChartResponses;

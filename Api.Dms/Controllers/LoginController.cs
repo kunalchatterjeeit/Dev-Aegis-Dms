@@ -21,6 +21,9 @@ namespace Api.Dms.Controllers
             {
                 if (ModelState.IsValid && model != null)
                 {
+                    BusinessLayer.GeneralSecurity.ValidateMac();
+                    if (DateTime.Now > DateTime.Now.AddDays(15))
+                        throw new Exception("Problem in authenticating. Please contact support.");
                     DataTable userDetails = GeneralSecurity.LogOn(model.Username.Trim());
                     if (userDetails != null && userDetails.Rows.Count > 0)
                     {

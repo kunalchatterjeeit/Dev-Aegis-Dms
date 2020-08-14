@@ -53,8 +53,8 @@ namespace DataLayer
                 else
                     oDm.Add("p_UserId", MySqlDbType.Int32, user.UserId);
 
-                oDm.Add("p_UserId", MySqlDbType.Int32, user.UserId);
-                oDm.Add("p_UserId", MySqlDbType.Int32, user.UserId);
+                //oDm.Add("p_UserId", MySqlDbType.Int32, user.UserId);
+                //oDm.Add("p_UserId", MySqlDbType.Int32, user.UserId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
                 using (MySqlDataReader reader = oDm.ExecuteReader("usp_User_GetAll"))

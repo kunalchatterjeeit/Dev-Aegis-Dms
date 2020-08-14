@@ -12,7 +12,6 @@ namespace Api.Dms
         protected void Application_Start()
         {
             GlobalConfiguration.Configure(WebApiConfig.Register);
-            
         }
     }
 }

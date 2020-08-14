@@ -264,5 +264,43 @@ namespace DataLayer
                 return retValue;
             }
         }
+
+        public static List<Entity.File> File_GetPendingContentSave()
+        {
+            List<Entity.File> files = new List<Entity.File>();
+            using (DataManager oDm = new DataManager())
+            {
+                oDm.CommandType = CommandType.StoredProcedure;
+                using (MySqlDataReader reader = oDm.ExecuteReader("usp_File_GetPendingContentSave"))
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+
+                            DateTime entryDate = new DateTime();
+                            files.Add(new Entity.File()
+                            {
+                                FileGuid = Guid.Parse(reader["FileGuid"].ToString()),
+                                FileTypeId = Convert.ToInt32(reader["FileTypeId"].ToString()),
+                                PhysicalFileName = reader["PhysicalFileName"].ToString(),
+                                FileOriginalName = reader["FileOriginalName"].ToString(),
+                                EntryDate = DateTime.TryParse(reader["EntryDate"].ToString(), out entryDate) ? entryDate : DateTime.MinValue,
+                                FileExtension = Path.GetExtension(reader["FileExtension"].ToString()),
+                                IsFullTextCopied = Convert.ToBoolean(reader["IsFullTextCopied"].ToString()),
+                                IsAttachment = Convert.ToBoolean(reader["IsAttachment"].ToString()),
+                                FileStatus = (int)Enum.Parse(typeof(Entity.FileStatus), reader["Status"].ToString()),
+                                CreatedByName = reader["CreatedBy"].ToString(),
+                                CreatedDate = DateTime.TryParse(reader["CreatedDate"].ToString(), out entryDate) ? entryDate : DateTime.MinValue,
+                                LastModifiedByName = Path.GetExtension(reader["LastModifiedBy"].ToString()),
+                                ModifiedDate = DateTime.TryParse(reader["LastModifiedDate"].ToString(), out entryDate) ? entryDate : DateTime.MinValue,
+                            });
+                        }
+                        oDm.Dispose();
+                    }
+                }
+            }
+            return files;
+        }
     }
 }

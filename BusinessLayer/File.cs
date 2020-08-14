@@ -116,6 +116,11 @@ namespace BusinessLayer
             return searchResults;
         }
 
+        public List<Entity.File> File_GetPendingContentSave()
+        {
+            return DataLayer.File.File_GetPendingContentSave();
+        }
+
         // Destructor
         ~File()
         {

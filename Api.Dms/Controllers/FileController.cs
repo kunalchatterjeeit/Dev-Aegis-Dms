@@ -469,5 +469,81 @@ namespace Api.Dms.Controllers
 
             return retValue;
         }
+
+        [HttpPost]
+        //[JwtAuthorization(Entity.Utility.FILE)]
+        public HttpResponseMessage UpdateFileContent(Entity.File model)
+        {
+            Entity.HttpResponse response = new Entity.HttpResponse();
+            HttpResponseMessage responseMessage = new HttpResponseMessage();
+            try
+            {
+                if (model != null)
+                {
+                    model.FileCompletePath = HttpContext.Current.Server.MapPath("~/RawFiles/Raw/") + model.FileOriginalName + model.FileExtension;
+                    string encryptedPhysicalFileNameWithPath = HttpContext.Current.Server.MapPath("~/RawFiles/") + model.PhysicalFileName + model.FileExtension;
+                    string decryptOriginalFileNameWithPath = HttpContext.Current.Server.MapPath("~/RawFiles/Raw/") + model.FileOriginalName + model.FileExtension;
+
+                    BusinessLayer.GeneralSecurity.DecryptFile(encryptedPhysicalFileNameWithPath, decryptOriginalFileNameWithPath);
+
+                    string randomName = DateTime.Now.Ticks.ToString();
+                    string htmlFilePath = HttpContext.Current.Server.MapPath("~/") + "RawFiles\\Temp\\" + randomName + ".html";
+                    BusinessLayer.FileContentTransfer.StartProcess(model.FileGuid.GetValueOrDefault(), decryptOriginalFileNameWithPath, htmlFilePath);
+
+                    response.ResponseCode = (int)ResponseCode.Success;
+                    responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                }
+                else
+                {
+                    throw new Exception("Invalid file guid");
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
+                responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+            }
+            return responseMessage;
+        }
+
+        [HttpPost]
+        //[JwtAuthorization(Entity.Utility.FILE)]
+        public HttpResponseMessage ClearAllDirectories()
+        {
+            Entity.HttpResponse response = new Entity.HttpResponse();
+            HttpResponseMessage responseMessage = new HttpResponseMessage();
+            try
+            {
+                string[] filePaths = Directory.GetFiles(HttpContext.Current.Server.MapPath("~/RawFiles/Raw/"));
+                foreach (string filePath in filePaths)
+                {
+                    try
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                    catch { }
+                }
+                filePaths = Directory.GetFiles(HttpContext.Current.Server.MapPath("~/RawFiles/Temp/"));
+                foreach (string filePath in filePaths)
+                {
+                    try
+                    {
+                        System.IO.File.Delete(filePath);
+                    }
+                    catch { }
+                }
+
+                response.ResponseCode = (int)ResponseCode.Success;
+                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
+                responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+            }
+            return responseMessage;
+        }
     }
 }

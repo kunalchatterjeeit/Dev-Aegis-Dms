@@ -7,6 +7,7 @@ using io = System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Text.RegularExpressions;
 
 namespace BusinessLayer
 {
@@ -106,7 +107,7 @@ namespace BusinessLayer
             string content = Encoding.UTF8.GetString(bytes);
 
             io.File.Delete(htmlFilePath.ToString());
-            io.File.Delete(_strFilePath.ToString());
+            //io.File.Delete(_strFilePath.ToString());
 
             return content;
         }
@@ -160,7 +161,7 @@ namespace BusinessLayer
             string content = Encoding.UTF8.GetString(bytes);
 
             io.File.Delete(htmlFilePath.ToString());
-            io.File.Delete(_strFilePath.ToString());
+            //io.File.Delete(_strFilePath.ToString());
 
             return content;
         }
@@ -201,18 +202,36 @@ namespace BusinessLayer
                 }
             }
 
-            //Removing special characters
-            //content = Regex.Replace(content, "[^a-zA-Z_]+", " ");
+            content = RemoveDuplicate(content);
+            content = RemoveArticlePreposition(content);
+            content = RemovePunctuationWhitespaces(content);
 
-            //Removing duplicate words
-            string outputString = string.Empty;
-            string[] input = content.Trim().Split(' ');
+            return content;
+        }
 
-            IEnumerable<string> IList = input.Distinct();
+        private static string RemoveDuplicate(string phrase)
+        {
+            var words = new HashSet<string>();
+            phrase = Regex.Replace(phrase, "\\w+", m =>
+                                 words.Add(m.Value.ToUpperInvariant())
+                                     ? m.Value
+                                     : string.Empty);
+            return phrase;
+        }
 
-            outputString = string.Join(" ", Array.ConvertAll(IList.ToArray(), i => i.ToString()));
+        private static string RemoveArticlePreposition(string phrase)
+        {
+            phrase = phrase.ToLower().Replace("a", "");
+            phrase = phrase.ToLower().Replace("an", "");
+            phrase = phrase.ToLower().Replace("the", "");
+            return phrase;
+        }
 
-            return outputString;
+        private static string RemovePunctuationWhitespaces(string phrase)
+        {
+            phrase = Regex.Replace(phrase, @"\s+", " ");
+            phrase = Regex.Replace(phrase, @"[^\w\s\@\.]", "");
+            return phrase;
         }
     }
 }
