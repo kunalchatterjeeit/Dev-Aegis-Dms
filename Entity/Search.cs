@@ -2,7 +2,7 @@
 
 namespace Entity
 {
-    public class Search
+    public class Search : BaseEntity
     {
         public SearchModeEnum SearchMode { get; set; }
         public string SearchString { get; set; }

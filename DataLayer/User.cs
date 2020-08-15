@@ -53,8 +53,7 @@ namespace DataLayer
                 else
                     oDm.Add("p_UserId", MySqlDbType.Int32, user.UserId);
 
-                //oDm.Add("p_UserId", MySqlDbType.Int32, user.UserId);
-                //oDm.Add("p_UserId", MySqlDbType.Int32, user.UserId);
+                oDm.InsertPaging(oDm, user, user.UserId);
 
                 oDm.CommandType = CommandType.StoredProcedure;
                 using (MySqlDataReader reader = oDm.ExecuteReader("usp_User_GetAll"))
@@ -74,6 +73,7 @@ namespace DataLayer
                                 Status = (Entity.UserStatus)Enum.Parse(typeof(Entity.UserStatus), reader["Status"].ToString()),
                                 LoginStatus = (string.IsNullOrEmpty(reader["LoginStatus"].ToString())) ? Entity.ApplicationLoginStatus.InActive : (Entity.ApplicationLoginStatus)Enum.Parse(typeof(Entity.ApplicationLoginStatus), reader["LoginStatus"].ToString()),
                                 CreatedDate = Convert.ToDateTime(reader["CreatedDate"].ToString()),
+                                TotalCount = Convert.ToInt32(reader["TotalRecord"].ToString())
                             });
                         }
                         oDm.Dispose();

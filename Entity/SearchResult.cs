@@ -2,7 +2,7 @@
 
 namespace Entity
 {
-    public class SearchResult
+    public class SearchResult: BaseEntity
     {
         public Guid FileGuid { get; set; }
         public string FileName { get; set; }

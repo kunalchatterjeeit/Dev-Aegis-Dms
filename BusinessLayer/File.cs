@@ -36,14 +36,14 @@ namespace BusinessLayer
             return DataLayer.File.File_Content_Save(fileGuid, content);
         }
 
-        public List<Entity.SearchResult> FileSearchByMetadata(string condition, int userId)
+        public List<Entity.SearchResult> FileSearchByMetadata(string condition, int userId, int pageIndex, int pageSize)
         {
-            return DataLayer.File.File_SearchByMetadata(condition, userId);
+            return DataLayer.File.File_SearchByMetadata(condition, userId, pageIndex, pageSize);
         }
 
-        public List<Entity.SearchResult> FileSearchByPhrase(string phrase, int userId)
+        public List<Entity.SearchResult> FileSearchByPhrase(string phrase, int userId, int pageIndex, int pageSize)
         {
-            return DataLayer.File.File_SearchByPhrase(phrase, userId);
+            return DataLayer.File.File_SearchByPhrase(phrase, userId, pageIndex, pageSize);
         }
 
         public Entity.File FileGetByFileGuid(string fileGuid)
@@ -71,7 +71,7 @@ namespace BusinessLayer
             return DataLayer.File.PdfSeperator_GetAll();
         }
 
-        public List<Entity.SearchResult> PrepareAdvanceSearch(List<Entity.Metadata> model, int userId)
+        public List<Entity.SearchResult> PrepareAdvanceSearch(List<Entity.Metadata> model, int userId, int pageIndex, int pageSize)
         {
             List<Entity.SearchResult> searchResults = new List<Entity.SearchResult>();
 
@@ -111,7 +111,7 @@ namespace BusinessLayer
                     query += " GROUP BY FileGuid HAVING COUNT(FileGuid) >= " + commonOccurance;
                 }
 
-                searchResults = new BusinessLayer.File().FileSearchByMetadata(query, userId);
+                searchResults = new BusinessLayer.File().FileSearchByMetadata(query, userId, pageIndex, pageSize);
             }
             return searchResults;
         }

@@ -328,9 +328,9 @@ namespace Api.Dms.Controllers
             {
                 List<Entity.SearchResult> files = new List<Entity.SearchResult>();
                 if (model.SearchMode == Entity.SearchModeEnum.QuickSearch)
-                    files = new BusinessLayer.File().FileSearchByPhrase(model.SearchString.Trim(), Convert.ToInt32(HttpContext.Current.User.Identity.Name));
+                    files = new BusinessLayer.File().FileSearchByPhrase(model.SearchString.Trim(), Convert.ToInt32(HttpContext.Current.User.Identity.Name), model.PageIndex, model.PageSize);
                 else
-                    files = new BusinessLayer.File().PrepareAdvanceSearch(model.Metadatas, Convert.ToInt32(HttpContext.Current.User.Identity.Name));
+                    files = new BusinessLayer.File().PrepareAdvanceSearch(model.Metadatas, Convert.ToInt32(HttpContext.Current.User.Identity.Name), model.PageIndex, model.PageSize);
                 response.ResponseData = files;
                 response.ResponseCode = (int)ResponseCode.Success;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
@@ -471,7 +471,6 @@ namespace Api.Dms.Controllers
         }
 
         [HttpPost]
-        //[JwtAuthorization(Entity.Utility.FILE)]
         public HttpResponseMessage UpdateFileContent(Entity.File model)
         {
             Entity.HttpResponse response = new Entity.HttpResponse();
@@ -508,7 +507,6 @@ namespace Api.Dms.Controllers
         }
 
         [HttpPost]
-        //[JwtAuthorization(Entity.Utility.FILE)]
         public HttpResponseMessage ClearAllDirectories()
         {
             Entity.HttpResponse response = new Entity.HttpResponse();
@@ -534,6 +532,38 @@ namespace Api.Dms.Controllers
                     catch { }
                 }
 
+                response.ResponseCode = (int)ResponseCode.Success;
+                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
+                responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+            }
+            return responseMessage;
+        }
+
+        [HttpPost]
+        [JwtAuthorization(Entity.Utility.FILE)]
+        public HttpResponseMessage FileDelete(Guid id)
+        {
+            Entity.HttpResponse response = new Entity.HttpResponse();
+            HttpResponseMessage responseMessage = new HttpResponseMessage();
+            try
+            {
+                Entity.File file = new BusinessLayer.File().FileGetByFileGuid(id.ToString());
+                int retValue = new BusinessLayer.File().FileDelete(id);
+                if (retValue > 0)
+                {
+                    string encryptedPhysicalFileNameWithPath = HttpContext.Current.Server.MapPath("~/RawFiles/") + file.PhysicalFileName + file.FileExtension;
+                    try
+                    {
+                        System.IO.File.Delete(encryptedPhysicalFileNameWithPath);
+                    }
+                    catch { }
+                    response.Message = "File deleted.";
+                }
                 response.ResponseCode = (int)ResponseCode.Success;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }

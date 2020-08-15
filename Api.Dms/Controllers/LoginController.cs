@@ -1,6 +1,7 @@
 ﻿using BusinessLayer;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Net;
@@ -21,8 +22,10 @@ namespace Api.Dms.Controllers
             {
                 if (ModelState.IsValid && model != null)
                 {
-                    BusinessLayer.GeneralSecurity.ValidateMac();
-                    if (DateTime.Now > DateTime.Now.AddDays(15))
+                    string runningOn = (string)new AppSettingsReader().GetValue("RunningOn", typeof(string));
+                    if (runningOn == "Local")
+                        BusinessLayer.GeneralSecurity.ValidateMac();
+                    if (Convert.ToDateTime("2020-08-10") > DateTime.Now.AddDays(15))
                         throw new Exception("Problem in authenticating. Please contact support.");
                     DataTable userDetails = GeneralSecurity.LogOn(model.Username.Trim());
                     if (userDetails != null && userDetails.Rows.Count > 0)

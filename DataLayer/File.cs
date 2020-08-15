@@ -110,13 +110,15 @@ namespace DataLayer
             }
         }
 
-        public static List<Entity.SearchResult> File_SearchByMetadata(string condition, int userId)
+        public static List<Entity.SearchResult> File_SearchByMetadata(string condition, int userId, int pageIndex, int pageSize)
         {
             List<Entity.SearchResult> files = new List<Entity.SearchResult>();
             using (DataManager oDm = new DataManager())
             {
                 oDm.Add("p_Condition", MySqlDbType.VarChar, condition);
                 oDm.Add("p_UserId", MySqlDbType.Int32, userId);
+                oDm.Add("p_PageIndex", MySqlDbType.Int32, pageIndex);
+                oDm.Add("p_PageSize", MySqlDbType.Int32, pageSize);
 
                 oDm.CommandType = CommandType.StoredProcedure;
                 using (MySqlDataReader reader = oDm.ExecuteReader("usp_File_SearchByMetadata"))
@@ -133,7 +135,8 @@ namespace DataLayer
                                 FileTypeName = reader["FileType"].ToString(),
                                 FileName = reader["FileName"].ToString(),
                                 EntryDate = DateTime.TryParse(reader["EntryDate"].ToString(), out entryDate) ? entryDate.ToString("dd/MM/yyyy") : string.Empty,
-                                FileExtension = Path.GetExtension(reader["FileName"].ToString())
+                                FileExtension = Path.GetExtension(reader["FileName"].ToString()),
+                                TotalCount = Convert.ToInt32(reader["TotalRecord"].ToString())
                             });
                         }
                         oDm.Dispose();
@@ -143,13 +146,15 @@ namespace DataLayer
             return files;
         }
 
-        public static List<Entity.SearchResult> File_SearchByPhrase(string phrase, int userId)
+        public static List<Entity.SearchResult> File_SearchByPhrase(string phrase, int userId, int pageIndex, int pageSize)
         {
             List<Entity.SearchResult> files = new List<Entity.SearchResult>();
             using (DataManager oDm = new DataManager())
             {
                 oDm.Add("p_phrase", MySqlDbType.VarChar, phrase);
                 oDm.Add("p_UserId", MySqlDbType.Int32, userId);
+                oDm.Add("p_PageIndex", MySqlDbType.Int32, pageIndex);
+                oDm.Add("p_PageSize", MySqlDbType.Int32, pageSize);
 
                 oDm.CommandType = CommandType.StoredProcedure;
                 using (MySqlDataReader reader = oDm.ExecuteReader("usp_File_SearchByPhrase"))
@@ -166,7 +171,8 @@ namespace DataLayer
                                 FileTypeName = reader["FileType"].ToString(),
                                 FileName = reader["FileName"].ToString(),
                                 EntryDate = DateTime.TryParse(reader["EntryDate"].ToString(), out entryDate) ? entryDate.ToString("dd/MM/yyyy") : string.Empty,
-                                FileExtension = Path.GetExtension(reader["FileName"].ToString())
+                                FileExtension = Path.GetExtension(reader["FileName"].ToString()),
+                                TotalCount = Convert.ToInt32(reader["TotalRecord"].ToString())
                             });
                         }
                         oDm.Dispose();

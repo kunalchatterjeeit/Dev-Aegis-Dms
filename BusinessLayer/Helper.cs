@@ -7,6 +7,7 @@ using System.Text;
 using System.IO;
 using System.Web.UI.WebControls;
 using Entity;
+using MySql.Data.MySqlClient;
 
 namespace BusinessLayer
 {
