@@ -147,18 +147,18 @@ namespace DataLayer
         }
         public DataManager InsertPaging(DataManager sqlCommand, BaseEntity entity, long primaryId)
         {
-            //int pageIndex = (entity.PageIndex < 0) ? 0 : entity.PageIndex; //Coming to next page row number
-
+            int pageIndex = (entity.PageIndex < 0) ? 0 : entity.PageIndex; //Coming to next page row number
+            int pageSize = (primaryId > 0) ? 1 : entity.PageSize;
             //pageIndex = (primaryId > 0) ? 1 : pageIndex + 1; //For single record coming blank
 
-            if (entity.PageIndex == 0)
+            if (pageIndex == 0)
                 sqlCommand.Add("p_PageIndex", DBNull.Value);
             else
-                sqlCommand.Add("p_PageIndex", entity.PageIndex);
-            if (entity.PageSize == 0)
+                sqlCommand.Add("p_PageIndex", pageIndex);
+            if (pageSize == 0)
                 sqlCommand.Add("p_PageSize", DBNull.Value);
             else
-                sqlCommand.Add("p_PageSize", entity.PageSize);
+                sqlCommand.Add("p_PageSize", pageSize);
             return sqlCommand;
         }
 

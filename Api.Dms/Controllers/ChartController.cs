@@ -1,7 +1,7 @@
 ﻿using BusinessLayer;
+using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Web;
@@ -31,6 +31,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "GetWeeklyUploadChart");
             }
             return responseMessage;
         }
@@ -45,7 +46,7 @@ namespace Api.Dms.Controllers
             {
                 decimal fileSize = new BusinessLayer.Chart().File_GetSize(
                     Convert.ToInt32(HttpContext.Current.User.Identity.Name));
-                response.ResponseData = (fileSize/1024).ToString("#.##"); //converting into MB
+                response.ResponseData = (fileSize / 1024).ToString("#.##"); //converting into MB
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
             catch (Exception ex)
@@ -53,6 +54,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "GetAllUploadFileSize");
             }
             return responseMessage;
         }
@@ -75,6 +77,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "GetAllUploadFileCount");
             }
             return responseMessage;
         }

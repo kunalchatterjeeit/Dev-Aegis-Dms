@@ -61,6 +61,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "Index");
             }
             return responseMessage;
         }

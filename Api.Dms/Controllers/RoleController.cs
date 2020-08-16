@@ -29,6 +29,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "RoleGetAll");
             }
             return responseMessage;
         }
@@ -57,6 +58,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "UserRoleCreate");
             }
             return responseMessage;
         }
@@ -78,6 +80,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "RoleGetById");
             }
             return responseMessage;
         }
@@ -101,6 +104,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "RoleDelete");
             }
             return responseMessage;
         }
@@ -122,6 +126,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "RolePermissionGetByRoleId");
             }
             return responseMessage;
         }
@@ -148,6 +153,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "RolePermissionSave");
             }
             return responseMessage;
         }

@@ -27,6 +27,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "DesignationGetAll");
             }
             return responseMessage;
         }
@@ -51,6 +52,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "UserGetAll");
             }
             return responseMessage;
         }
@@ -100,6 +102,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "UserCreate");
             }
             return responseMessage;
         }
@@ -125,6 +128,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "UserActiveChange");
             }
             return responseMessage;
         }
@@ -150,6 +154,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "UserLoginChange");
             }
             return responseMessage;
         }
@@ -171,6 +176,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "UserGroupGetAll");
             }
             return responseMessage;
         }
@@ -199,6 +205,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "UserGroupCreate");
             }
             return responseMessage;
         }
@@ -223,6 +230,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "UserGroupGetById");
             }
             return responseMessage;
         }
@@ -246,6 +254,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "UserGroupDelete");
             }
             return responseMessage;
         }

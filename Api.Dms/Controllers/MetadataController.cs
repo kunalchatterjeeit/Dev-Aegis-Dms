@@ -27,6 +27,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "MetadataGetAll");
             }
             return responseMessage;
         }
@@ -51,6 +52,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "MetadataGetByFileTypeId");
             }
             return responseMessage;
         }
@@ -79,6 +81,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "MetadataCreate");
             }
             return responseMessage;
         }
@@ -103,6 +106,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "MetadataGetById");
             }
             return responseMessage;
         }
@@ -126,6 +130,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "MetadataDelete");
             }
             return responseMessage;
         }
@@ -153,6 +158,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "MetadataContentGetByMetadataId");
             }
             return responseMessage;
         }

@@ -32,6 +32,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "FileCategoryGetAll");
             }
             return responseMessage;
         }
@@ -60,6 +61,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "FileCategoryCreate");
             }
             return responseMessage;
         }
@@ -84,6 +86,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "FileCategoryGetById");
             }
             return responseMessage;
         }
@@ -107,6 +110,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "FileCategoryDelete");
             }
             return responseMessage;
         }
@@ -128,6 +132,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "FileTypeGetAll");
             }
             return responseMessage;
         }
@@ -152,6 +157,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "FileTypeGetByFileCategoryId");
             }
             return responseMessage;
         }
@@ -180,6 +186,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "FileTypeCreate");
             }
             return responseMessage;
         }
@@ -204,6 +211,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "FileTypeGetById");
             }
             return responseMessage;
         }
@@ -227,6 +235,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "FileTypeDelete");
             }
             return responseMessage;
         }
@@ -314,6 +323,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                new BusinessLayer.Logger().LogException(ex, "Upload");
             }
             return responseMessage;
         }
@@ -340,6 +350,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                new BusinessLayer.Logger().LogException(ex, "Search");
             }
             return responseMessage;
         }
@@ -421,6 +432,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                new BusinessLayer.Logger().LogException(ex, "GetFilePath");
             }
             return responseMessage;
         }
@@ -502,6 +514,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                new BusinessLayer.Logger().LogException(ex, "UpdateFileContent");
             }
             return responseMessage;
         }
@@ -529,7 +542,9 @@ namespace Api.Dms.Controllers
                     {
                         System.IO.File.Delete(filePath);
                     }
-                    catch { }
+                    catch(Exception ex) {
+                        new BusinessLayer.Logger().LogException(ex, "GetWeeklyUploadChart");
+                    }
                 }
 
                 response.ResponseCode = (int)ResponseCode.Success;
@@ -540,6 +555,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                new BusinessLayer.Logger().LogException(ex, "ClearAllDirectories");
             }
             return responseMessage;
         }
@@ -572,6 +588,7 @@ namespace Api.Dms.Controllers
                 response.Message = ex.Message;
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                new BusinessLayer.Logger().LogException(ex, "FileDelete");
             }
             return responseMessage;
         }
