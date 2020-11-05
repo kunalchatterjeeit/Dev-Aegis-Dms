@@ -71,7 +71,9 @@ namespace Api.Dms.Controllers
                     int retValue = new BusinessLayer.User().UserSave(model);
                     Entity.User newUser = new BusinessLayer.User().UserGetAll(new Entity.User()
                     {
-                        Username = model.Username
+                        Username = model.Username,
+                        PageIndex = 0,
+                        PageSize = 1
                     }).FirstOrDefault();
 
                     if (retValue > 0)
@@ -85,6 +87,10 @@ namespace Api.Dms.Controllers
                                 CreatedBy = model.CreatedBy,
                                 Status = 1
                             });
+
+                        List<Entity.Role> roles = new BusinessLayer.Role().RoleGetAll(0);
+                        foreach (Entity.Role role in roles)
+                            new BusinessLayer.User().UserRole_Save(newUser.UserId, role.RoleId, false);
                         foreach (int roleId in model.SelectedUserRoles)
                             new BusinessLayer.User().UserRole_Save(newUser.UserId, roleId, true);
                     }

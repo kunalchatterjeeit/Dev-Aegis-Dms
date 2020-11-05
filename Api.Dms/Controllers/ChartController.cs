@@ -46,7 +46,7 @@ namespace Api.Dms.Controllers
             {
                 decimal fileSize = new BusinessLayer.Chart().File_GetSize(
                     Convert.ToInt32(HttpContext.Current.User.Identity.Name));
-                response.ResponseData = (fileSize / 1024).ToString("#.##"); //converting into MB
+                response.ResponseData = (fileSize == 0) ? fileSize.ToString() : (fileSize / 1024).ToString("#.##"); //converting into MB
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
             }
             catch (Exception ex)

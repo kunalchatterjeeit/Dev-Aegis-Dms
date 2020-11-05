@@ -11,7 +11,7 @@ namespace BusinessLayer
             int retValue = 0;
             foreach (Entity.Metadata metadata in metadatas)
             {
-                if (!string.IsNullOrEmpty(metadata.MetadataValue.Trim()))
+                if (!string.IsNullOrEmpty(metadata.MetadataValue))
                 {
                     Entity.MetadataFileMapping metadataFileMapping = new Entity.MetadataFileMapping()
                     {

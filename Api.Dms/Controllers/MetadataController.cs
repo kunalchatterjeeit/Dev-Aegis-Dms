@@ -162,5 +162,29 @@ namespace Api.Dms.Controllers
             }
             return responseMessage;
         }
+
+        [HttpPost]
+        [JwtAuthorization(Entity.Utility.FILE)]
+        public HttpResponseMessage MetadataFileMappingDelete(string id)
+        {
+            Entity.HttpResponse response = new Entity.HttpResponse();
+            HttpResponseMessage responseMessage = new HttpResponseMessage();
+            try
+            {
+                int retValue = new BusinessLayer.MetadataFileMapping().MetadataFileMapping_Delete(id);
+                if (retValue > 0)
+                    response.Message = "Metadata file mapping deleted.";
+                response.ResponseCode = (int)ResponseCode.Success;
+                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
+                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "MetadataFileMappingDelete");
+            }
+            return responseMessage;
+        }
     }
 }

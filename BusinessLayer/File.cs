@@ -48,7 +48,15 @@ namespace BusinessLayer
 
         public Entity.File FileGetByFileGuid(string fileGuid)
         {
-            return DataLayer.File.File_GetByFileGuid(fileGuid);
+            Entity.File file = DataLayer.File.File_GetByFileGuid(fileGuid);
+            file.UserGroups = DataLayer.UserGroup.UserGroupFileMapping_GetByFileGuid(fileGuid);
+            file.MetadataFileMappings = DataLayer.File.MetadataFileMapping_GetByFileGuid(fileGuid);
+            return file;
+        }
+
+        public Entity.File File_GetByFileId(long fileId)
+        {
+            return DataLayer.File.File_GetByFileId(fileId);
         }
 
         public int FileStatusChange(Guid fileGuid, int status)
@@ -61,10 +69,10 @@ namespace BusinessLayer
             return DataLayer.File.File_Delete(fileGuid);
         }
 
-        public DataTable MetadataFileMappingGetByFileGuid(string fileGuid)
-        {
-            return DataLayer.File.MetadataFileMapping_GetByFileGuid(fileGuid);
-        }
+        //public DataTable MetadataFileMappingGetByFileGuid(string fileGuid)
+        //{
+        //    return DataLayer.File.MetadataFileMapping_GetByFileGuid(fileGuid);
+        //}
 
         public DataTable PdfSeperatorGetAll()
         {
@@ -119,6 +127,21 @@ namespace BusinessLayer
         public List<Entity.File> File_GetPendingContentSave()
         {
             return DataLayer.File.File_GetPendingContentSave();
+        }
+
+        public int File_Replace(Entity.File file)
+        {
+            return DataLayer.File.File_Replace(file);
+        }
+
+        public int File_Audit_Save(Entity.FileAudit fileAudit)
+        {
+            return DataLayer.File.File_Audit_Save(fileAudit);
+        }
+
+        public List<Entity.FileAudit> FileAuditTrail_GetAll(Guid? fileGuid)
+        {
+            return DataLayer.File.FileAuditTrail_GetAll(fileGuid);
         }
 
         // Destructor

@@ -21,9 +21,14 @@ namespace BusinessLayer
             return DataLayer.MetadataFileMapping.MetadataFileMapping_GetAll(metadataFileMapping);
         }
 
-        public static List<Entity.MetadataSearch> MetadataFileMappingByMetadataId(Int64 metadataId)
+        public static List<Entity.MetadataSearch> MetadataFileMappingByMetadataId(long metadataId)
         {
             return DataLayer.MetadataFileMapping.MetadataFileMapping_ByMetadataId(metadataId);
+        }
+
+        public int MetadataFileMapping_Delete(string fileGuid)
+        {
+            return DataLayer.MetadataFileMapping.MetadataFileMapping_Delete(fileGuid);
         }
 
         ~MetadataFileMapping()

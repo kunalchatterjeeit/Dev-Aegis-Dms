@@ -285,11 +285,30 @@ namespace Api.Dms.Controllers
                         CreatedDate = DateTime.Now,
                         CreatedBy = Convert.ToInt32(HttpContext.Current.User.Identity.Name),
                         FileStatus = (int)Entity.FileStatus.Active,
-                        SizeInKb = fileSize / 1000
+                        SizeInKb = fileSize / 1024,
+                        VersionNumber = 1
                     };
 
                     //Saving file information
                     retValue = new BusinessLayer.File().FileSave(file);
+
+                    Entity.File newFile = new BusinessLayer.File().FileGetByFileGuid(retValue.ToString());
+
+                    if (newFile != null)
+                    {
+                        //Saving file version information
+                        new BusinessLayer.FileVersion().FileVersion_Save(new Entity.FileVersion()
+                        {
+                            CreatedBy = Convert.ToInt32(HttpContext.Current.User.Identity.Name),
+                            CreatedDate = DateTime.UtcNow,
+                            Description = "INITIAL FILE",
+                            FileGuid = retValue,
+                            FileId = newFile.FileId,
+                            FileExtension = newFile.FileExtension,
+                            FileOriginalName = newFile.FileOriginalName,
+                            PhysicalFileName = newFile.PhysicalFileName
+                        });
+                    }
 
                     string filePath = physicalPath + postedFile.FileName;
                     string newEncryptedFileNameAndPath = retValue + file.FileExtension;
@@ -299,8 +318,20 @@ namespace Api.Dms.Controllers
 
                     FileEncrypting(physicalPath, file, filePath);
                     MetadataSaving(retValue, file, metadatas, Convert.ToInt32(HttpContext.Current.User.Identity.Name));
-                    //Saving user group
                     UserGroupFileMapping_Save(retValue, userGroups);
+
+                    List<Entity.User> users = new BusinessLayer.User().UserGetAll(new Entity.User()
+                    {
+                        UserId = Convert.ToInt32(HttpContext.Current.User.Identity.Name)
+                    });
+                    string fileAuditLog = string.Format(Entity.FileAuditEnum.FileUploaded, postedFile.FileName, users.FirstOrDefault().Name, DateTime.Now.ToString("dd/MM/yyyy"), file.VersionNumber);
+                    new BusinessLayer.File().File_Audit_Save(new Entity.FileAudit()
+                    {
+                        FileId = newFile.FileId,
+                        Log = fileAuditLog,
+                        UserId = Convert.ToInt32(HttpContext.Current.User.Identity.Name),
+                        CreatedDate = DateTime.Now
+                    });
 
                     if (retValue != null)
                     {
@@ -308,7 +339,6 @@ namespace Api.Dms.Controllers
                         response.ResponseCode = (int)ResponseCode.Success;
                         responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
                     }
-
                 }
                 else
                 {
@@ -426,6 +456,19 @@ namespace Api.Dms.Controllers
                 response.ResponseData = file;
                 response.ResponseCode = (int)ResponseCode.Success;
                 responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+
+                List<Entity.User> users = new BusinessLayer.User().UserGetAll(new Entity.User()
+                {
+                    UserId = Convert.ToInt32(HttpContext.Current.User.Identity.Name)
+                });
+                string fileAuditLog = string.Format(Entity.FileAuditEnum.FileViewed, file.FileOriginalName + file.FileExtension, users.FirstOrDefault().Name, DateTime.Now.ToString("dd/MM/yyyy"));
+                new BusinessLayer.File().File_Audit_Save(new Entity.FileAudit()
+                {
+                    FileId = file.FileId,
+                    Log = fileAuditLog,
+                    UserId = Convert.ToInt32(HttpContext.Current.User.Identity.Name),
+                    CreatedDate = DateTime.Now
+                });
             }
             catch (Exception ex)
             {
@@ -441,14 +484,14 @@ namespace Api.Dms.Controllers
         {
             BusinessLayer.Metadata metadata = new Metadata();
             //Saving metadata
-            if (metadata.IsMetadataManual(metadatas))
-            {
-                metadata.MetadataFileMapping_Save(retValue, metadatas, userId);
-            }
-            else
-            {
-                metadata.MetadataFileMapping_Save(retValue, metadatas, userId, file.FileOriginalName);
-            }
+            //if (metadata.IsMetadataManual(metadatas))
+            //{
+            metadata.MetadataFileMapping_Save(retValue, metadatas, userId);
+            //}
+            //else
+            //{
+            //    metadata.MetadataFileMapping_Save(retValue, metadatas, userId, file.FileOriginalName);
+            //}
         }
 
         private static void FileEncrypting(string physicalPath, Entity.File file, string filePath)
@@ -542,7 +585,8 @@ namespace Api.Dms.Controllers
                     {
                         System.IO.File.Delete(filePath);
                     }
-                    catch(Exception ex) {
+                    catch (Exception ex)
+                    {
                         new BusinessLayer.Logger().LogException(ex, "GetWeeklyUploadChart");
                     }
                 }
@@ -578,6 +622,20 @@ namespace Api.Dms.Controllers
                         System.IO.File.Delete(encryptedPhysicalFileNameWithPath);
                     }
                     catch { }
+
+                    List<Entity.User> users = new BusinessLayer.User().UserGetAll(new Entity.User()
+                    {
+                        UserId = Convert.ToInt32(HttpContext.Current.User.Identity.Name)
+                    });
+                    string fileAuditLog = string.Format(Entity.FileAuditEnum.FileDeleted, file.FileOriginalName + file.FileExtension, users.FirstOrDefault().Name, DateTime.Now.ToString("dd/MM/yyyy"));
+                    new BusinessLayer.File().File_Audit_Save(new Entity.FileAudit()
+                    {
+                        FileId = file.FileId,
+                        Log = fileAuditLog,
+                        UserId = Convert.ToInt32(HttpContext.Current.User.Identity.Name),
+                        CreatedDate = DateTime.Now
+                    });
+
                     response.Message = "File deleted.";
                 }
                 response.ResponseCode = (int)ResponseCode.Success;
@@ -589,6 +647,242 @@ namespace Api.Dms.Controllers
                 response.ResponseCode = (int)ResponseCode.CriticalCode;
                 responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
                 new BusinessLayer.Logger().LogException(ex, "FileDelete");
+            }
+            return responseMessage;
+        }
+
+        [HttpPost]
+        [JwtAuthorization(Entity.Utility.FILE)]
+        public HttpResponseMessage GetFileByFileGuid(Guid id)
+        {
+            Entity.HttpResponse response = new Entity.HttpResponse();
+            HttpResponseMessage responseMessage = new HttpResponseMessage();
+            try
+            {
+                Entity.File file = new BusinessLayer.File().FileGetByFileGuid(id.ToString());
+                response.ResponseData = file;
+                response.ResponseCode = (int)ResponseCode.Success;
+                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
+                responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                new BusinessLayer.Logger().LogException(ex, "GetFilePath");
+            }
+            return responseMessage;
+        }
+
+        [HttpPost]
+        [JwtAuthorization(Entity.Utility.FILE)]
+        public HttpResponseMessage UserGroupFileMappingDelete(string id)
+        {
+            Entity.HttpResponse response = new Entity.HttpResponse();
+            HttpResponseMessage responseMessage = new HttpResponseMessage();
+            try
+            {
+                int retValue = new BusinessLayer.UserGroup().UserGroupFileMapping_Delete(id);
+                if (retValue > 0)
+                    response.Message = "Usergroup file mapping deleted.";
+                response.ResponseCode = (int)ResponseCode.Success;
+                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
+                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                new BusinessLayer.Logger().LogException(ex, "UserGroupFileMappingDelete");
+            }
+            return responseMessage;
+        }
+
+        [HttpPost]
+        [JwtAuthorization(Entity.Utility.FILE)]
+        public HttpResponseMessage UpdateFile(Entity.File model)
+        {
+            Entity.HttpResponse response = new Entity.HttpResponse();
+            HttpResponseMessage responseMessage = new HttpResponseMessage();
+            try
+            {
+                List<Entity.Metadata> metadatas = new List<Entity.Metadata>();
+                List<Entity.UserGroup> userGroups = new List<Entity.UserGroup>();
+                foreach (int userGroupId in model.SelectedUserGroups)
+                    userGroups.Add(new Entity.UserGroup()
+                    {
+                        UserGroupId = userGroupId
+                    });
+                foreach (Entity.MetadataFileMapping metadataFileMapping in model.MetadataFileMappings)
+                    metadatas.Add(new Entity.Metadata()
+                    {
+                        MetadataId = metadataFileMapping.MetadataId,
+                        MetadataValue = metadataFileMapping.MetadataContent
+                    });
+                Entity.File file = new BusinessLayer.File().FileGetByFileGuid(model.FileGuid.ToString());
+                file.EntryDate = model.EntryDate;
+                file.FileTypeId = model.FileTypeId;
+                file.ModifiedBy = Convert.ToInt32(HttpContext.Current.User.Identity.Name);
+                file.ModifiedDate = DateTime.Now;
+                new BusinessLayer.File().FileUpdate(file);
+
+                MetadataSaving(file.FileGuid, file, metadatas, Convert.ToInt32(HttpContext.Current.User.Identity.Name));
+                //Saving user group
+                UserGroupFileMapping_Save(file.FileGuid, userGroups.Select(p => p.UserGroupId.ToString()).ToList());
+
+                response.Message = file.FileOriginalName + file.FileExtension + " details updated.";
+                response.ResponseCode = (int)ResponseCode.Success;
+                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
+                responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                new BusinessLayer.Logger().LogException(ex, "Upload");
+            }
+            return responseMessage;
+        }
+
+        [HttpPost]
+        [JwtAuthorization(Entity.Utility.FILE)]
+        public HttpResponseMessage GetFileVersionsByFileGuid(Entity.FileVersion model)
+        {
+            Entity.HttpResponse response = new Entity.HttpResponse();
+            HttpResponseMessage responseMessage = new HttpResponseMessage();
+            try
+            {
+                List<Entity.FileVersion> files = new List<Entity.FileVersion>();
+                files = new BusinessLayer.FileVersion().FileVersion_GetByFileGuid(model.FileId, model.PageIndex, model.PageSize);
+                response.ResponseData = files;
+                response.ResponseCode = (int)ResponseCode.Success;
+                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
+                responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                new BusinessLayer.Logger().LogException(ex, "Search");
+            }
+            return responseMessage;
+        }
+
+        [HttpPost]
+        [JwtAuthorization(Entity.Utility.FILE)]
+        public HttpResponseMessage Replace()
+        {
+            Entity.HttpResponse response = new Entity.HttpResponse();
+            HttpResponseMessage responseMessage = new HttpResponseMessage();
+            try
+            {
+                string physicalPath = HttpContext.Current.Server.MapPath("~/RawFiles/");
+                Guid? retValue = null;
+                var httpRequest = HttpContext.Current.Request;
+
+
+                if (httpRequest.Files.Count > 0)
+                {
+                    string fileName = string.Empty;
+                    string fileId = string.Empty;
+                    int fileSize = httpRequest.Files["myFile"].ContentLength;
+
+                    var postedFile = httpRequest.Files["myFile"];
+                    fileName = postedFile.FileName;
+                    fileId = httpRequest["fileId"];
+
+                    Entity.File file = new BusinessLayer.File().File_GetByFileId(Convert.ToInt64(fileId));
+                    if (file != null)
+                    {
+                        //Saving file version information
+                        Entity.FileVersion fileVersion = new Entity.FileVersion()
+                        {
+                            CreatedBy = Convert.ToInt32(HttpContext.Current.User.Identity.Name),
+                            CreatedDate = DateTime.UtcNow,
+                            Description = "INITIAL FILE",
+                            FileId = file.FileId,
+                            FileExtension = Path.GetExtension(fileName),
+                            FileOriginalName = Path.GetFileNameWithoutExtension(fileName),
+                            VersionNumber = file.VersionNumber + 1
+                        };
+
+                        //Saving file information
+                        retValue = new BusinessLayer.FileVersion().FileVersion_Save(fileVersion);
+
+                        string filePath = physicalPath + postedFile.FileName;
+                        string newEncryptedFileNameAndPath = retValue + fileVersion.FileExtension;
+                        postedFile.SaveAs(filePath);
+
+                        new BusinessLayer.File().File_Replace(new Entity.File()
+                        {
+                            FileGuid = retValue,
+                            FileExtension = fileVersion.FileExtension,
+                            FileId = file.FileId,
+                            FileOriginalName = fileVersion.FileOriginalName,
+                            PhysicalFileName = retValue.ToString(),
+                            ModifiedBy = Convert.ToInt32(HttpContext.Current.User.Identity.Name),
+                            ModifiedDate = DateTime.Now,
+                            VersionNumber = file.VersionNumber + 1,
+                            SizeInKb = fileSize / 1024
+                        });
+                    }
+
+                    List<Entity.User> users = new BusinessLayer.User().UserGetAll(new Entity.User()
+                    {
+                        UserId = Convert.ToInt32(HttpContext.Current.User.Identity.Name)
+                    });
+                    string fileAuditLog = string.Format(Entity.FileAuditEnum.FileReplaced, file.FileOriginalName + file.FileExtension, users.FirstOrDefault().Name, DateTime.Now.ToString("dd/MM/yyyy"), file.VersionNumber);
+                    new BusinessLayer.File().File_Audit_Save(new Entity.FileAudit()
+                    {
+                        FileId = file.FileId,
+                        Log = fileAuditLog,
+                        UserId = Convert.ToInt32(HttpContext.Current.User.Identity.Name),
+                        CreatedDate = DateTime.Now
+                    });
+
+                    if (retValue != null)
+                    {
+                        response.Message = postedFile.FileName + " upload completed.";
+                        response.ResponseCode = (int)ResponseCode.Success;
+                        responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+                    }
+                }
+                else
+                {
+                    response.Message = "No file uploaded.";
+                    response.ResponseCode = (int)ResponseCode.CriticalCode;
+                    responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                }
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
+                responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                new BusinessLayer.Logger().LogException(ex, "Upload");
+            }
+            return responseMessage;
+        }
+
+        [HttpPost]
+        [JwtAuthorization(Entity.Utility.FILE)]
+        public HttpResponseMessage GetFileAuditTrailByFileGuid(Entity.FileAudit model)
+        {
+            Entity.HttpResponse response = new Entity.HttpResponse();
+            HttpResponseMessage responseMessage = new HttpResponseMessage();
+            try
+            {
+                List<Entity.FileAudit> fileAudits = new BusinessLayer.File().FileAuditTrail_GetAll(model.FileGuid);
+                response.ResponseData = fileAudits;
+                response.ResponseCode = (int)ResponseCode.Success;
+                responseMessage = Request.CreateResponse(HttpStatusCode.OK, response);
+            }
+            catch (Exception ex)
+            {
+                response.Message = ex.Message;
+                response.ResponseCode = (int)ResponseCode.CriticalCode;
+                responseMessage = Request.CreateResponse(HttpStatusCode.BadRequest, response);
+                new BusinessLayer.Logger().LogException(ex, "GetFilePath");
             }
             return responseMessage;
         }

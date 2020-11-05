@@ -65,5 +65,18 @@ namespace DataLayer
             }
             return metadataSearches;
         }
+
+        public static int MetadataFileMapping_Delete(string fileGuid)
+        {
+            using (DataManager oDm = new DataManager())
+            {
+                oDm.Add("p_FileGuid", MySqlDbType.VarChar, fileGuid);
+
+                oDm.CommandType = CommandType.StoredProcedure;
+                int retValue = oDm.ExecuteNonQuery("usp_MetadataFileMapping_Delete");
+                oDm.Dispose();
+                return retValue;
+            }
+        }
     }
 }

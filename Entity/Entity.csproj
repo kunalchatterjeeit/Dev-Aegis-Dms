@@ -44,6 +44,9 @@
     <Compile Include="Auth.cs" />
     <Compile Include="BarChartResponse.cs" />
     <Compile Include="BaseEntity.cs" />
+    <Compile Include="FileAudit.cs" />
+    <Compile Include="FileAuditEnum.cs" />
+    <Compile Include="FileVersion.cs" />
     <Compile Include="FileViewerResult.cs" />
     <Compile Include="HttpResponse.cs" />
     <Compile Include="CryptographyMode.cs" />

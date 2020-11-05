@@ -243,6 +243,7 @@
     <Compile Include="FileContent.cs" />
     <Compile Include="FileContentTransfer.cs" />
     <Compile Include="FileType.cs" />
+    <Compile Include="FileVersion.cs" />
     <Compile Include="GlobalSuppressions.cs" />
     <Compile Include="Helper.cs" />
     <Compile Include="JwtAuthorization.cs" />

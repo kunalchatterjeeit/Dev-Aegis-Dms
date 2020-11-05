@@ -41,6 +41,11 @@ namespace BusinessLayer
             return DataLayer.UserGroup.UserGroup_GetByUserId(userId);
         }
 
+        public int UserGroupFileMapping_Delete(string fileGuid)
+        {
+            return DataLayer.UserGroup.UserGroupFileMapping_Delete(fileGuid);
+        }
+
         ~UserGroup()
         {
             Dispose(false);

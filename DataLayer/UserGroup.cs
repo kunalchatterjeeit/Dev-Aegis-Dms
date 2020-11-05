@@ -135,5 +135,45 @@ namespace DataLayer
                 return userGroups;
             }
         }
+
+        public static List<Entity.UserGroup> UserGroupFileMapping_GetByFileGuid(string fileGuid)
+        {
+            List<Entity.UserGroup> userGroups = new List<Entity.UserGroup>();
+            using (DataManager oDm = new DataManager())
+            {
+                oDm.Add("p_FileGuid", MySqlDbType.VarChar, fileGuid);
+                oDm.CommandType = CommandType.StoredProcedure;
+                using (MySqlDataReader reader = oDm.ExecuteReader("usp_UserGroupFileMapping_GetByFileGuid"))
+                {
+                    if (reader.HasRows)
+                    {
+                        while (reader.Read())
+                        {
+                            userGroups.Add(new Entity.UserGroup()
+                            {
+                                UserGroupUserMappingId = Convert.ToInt64(reader["UserGroupFileMappingId"].ToString()),
+                                UserGroupId = Convert.ToInt32(reader["UserGroupId"].ToString()),
+                                Name = reader["Name"].ToString()
+                            });
+                        }
+                        oDm.Dispose();
+                    }
+                }
+                return userGroups;
+            }
+        }
+
+        public static int UserGroupFileMapping_Delete(string fileGuid)
+        {
+            using (DataManager oDm = new DataManager())
+            {
+                oDm.Add("p_FileGuid", MySqlDbType.VarChar, fileGuid);
+
+                oDm.CommandType = CommandType.StoredProcedure;
+                int retValue = oDm.ExecuteNonQuery("usp_UserGroupFileMapping_Delete");
+                oDm.Dispose();
+                return retValue;
+            }
+        }
     }
 }

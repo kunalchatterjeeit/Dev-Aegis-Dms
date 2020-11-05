@@ -200,6 +200,7 @@
     <Compile Include="FileContent.cs" />
     <Compile Include="FileType.cs" />
     <Compile Include="Auth.cs" />
+    <Compile Include="FileVersion.cs" />
     <Compile Include="Logger.cs" />
     <Compile Include="Metadata.cs" />
     <Compile Include="MetadataFileMapping.cs" />
